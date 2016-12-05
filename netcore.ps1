@@ -72,7 +72,7 @@ If (Test-Path Env:APPVEYOR_REPO_TAG_NAME) {
       echo "Tag but not release"
     }
 } Else {
-  $version = "3.0.0"
+  $version = "0.9.3"
   $type = "ci-"
   $buildNumber = @{ $true = $env:APPVEYOR_BUILD_NUMBER; $false = 1 }[$env:APPVEYOR_BUILD_NUMBER -ne $NULL];
   $buildNumber = "{0:D4}" -f [convert]::ToInt32($buildNumber, 10), $buildNumber
