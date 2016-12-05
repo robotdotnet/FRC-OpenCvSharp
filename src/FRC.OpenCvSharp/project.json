@@ -1,0 +1,41 @@
+{
+  "version": "0.9.3-local-*",
+  "title": "FRC OpenCvSharp",
+  "description": "OpenCvSharp libraries built for FRC",
+  "copyright": "Copyright 2016 RobotDotNet, shimat",
+  "authors": [
+    "RobotDotNet"
+  ],
+  "packOptions": {
+    "owners": [
+      "RobotDotNet"
+    ],
+    "authors": [
+      "RobotDotNet"
+    ],
+    "id": "FRC.OpenCvSharp",
+    "tags": [ "WPILib", "FRC", "FIRST", "RoboRio" ],
+    "title": "FRC OpenCvSharp",
+    "requireLicenseAcceptance": false,
+    "projectUrl": "https://github.com/robotdotnet/FRC-OpenCvSharp",
+    "summary": "Native desktop libraries for OpenCvSharp",
+    "licenseUrl": "https://github.com/robotdotnet/FRC-OpenCvSharp/blob/master/LICENSE.txt",
+    "repository": {
+      "type": "git",
+      "url": "git://github.com/robotdotnet/FRC-OpenCvSharp"
+    }
+  },
+  "buildOptions": {
+    "allowUnsafe": true,
+    "xmlDoc": true
+  },
+  "frameworks": {
+    "net45": {
+    }
+  },
+  "configurations": {
+    "Debug": {
+      "define": [ "DEBUG" ]
+    }
+  }
+}

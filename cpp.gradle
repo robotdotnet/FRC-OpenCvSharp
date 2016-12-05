@@ -1,0 +1,103 @@
+def cppSetupModel = { project ->
+    project.model {
+        components {
+            OpenCvSharpExtern(NativeLibrarySpec) {
+                if (project.isArm) {
+                    targetPlatform 'arm'
+                } else {
+                    if (!project.hasProperty('skipx86')) {
+                        targetPlatform 'x86'
+                    }
+                    targetPlatform 'x64'
+                }
+
+                setupDefines(project, binaries)
+
+                binaries.all {
+                        project.setupDef(linker, "${rootDir}/OpenCVSharpExtern.def")
+                    }
+
+
+                sources {
+                    cpp {
+                        source {
+                            srcDirs = [cppSrc]
+                            includes = ["**/*.cpp"]
+                        }
+                        exportedHeaders {
+                            srcDirs = [cppInclude, project.openCvInclude, "${rootDir}/include"]
+                            includes = ['**/*.h']
+                            includes = ['**/*.hpp']
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+def openCvZipTask = { project ->
+    project.ext.opencvZip = project.tasks.create("${project.isArm ? 'arm' : 'native'}OpencvZip", Zip) {
+        description = 'Creates platform-specific zip of the opencv libraries.'
+        group = 'WPILib'
+        destinationDir = project.buildDir
+        baseName = 'OpenCvSharpExtern'
+        classifier = "${project.buildPlatform}"
+        duplicatesStrategy = 'exclude'
+
+        project.model {
+            binaries {
+                withType(StaticLibraryBinarySpec) { binary ->
+                    from(binary.staticLibraryFile) {
+                        into getPlatformPath(binary)
+                    }
+                }
+                withType(SharedLibraryBinarySpec) { binary ->
+                    from(binary.sharedLibraryFile) {
+                        into getPlatformPath(binary)
+                    }
+                    from (new File(binary.sharedLibraryFile.absolutePath + ".debug")) {
+                        into getPlatformPath(binary)
+                    }
+                }
+            }
+        }
+    }
+
+    project.build.dependsOn project.opencvZip
+
+    project.tasks.whenTaskAdded { task ->
+        def name = task.name.toLowerCase()
+        if (name.contains("opencvsharpexternsharedlibrary") || name.contains("opencvsharpexternstaticlibrary")) {
+            project.opencvZip.dependsOn task
+        }
+    }
+}
+
+if (buildArm) {
+    project(':arm') {
+        apply plugin: 'cpp'
+
+        apply from: "${rootDir}/toolchains/arm.gradle"
+
+        project.debugStripSetup()
+        cppSetupModel(project)
+        openCvZipTask(project)
+        useOpenCv(project)
+    }
+}
+
+if (buildNative) {
+    project(':native') {
+        apply plugin: 'cpp'
+
+        apply from: "${rootDir}/toolchains/native.gradle"
+
+        project.debugStripSetup()
+        cppSetupModel(project)
+        openCvZipTask(project)
+        useOpenCv(project)
+        useWpiUtil(project)
+        useCsCore(project)
+    }
+}

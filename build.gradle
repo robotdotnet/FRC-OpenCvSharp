@@ -1,0 +1,105 @@
+import org.gradle.internal.os.OperatingSystem
+
+plugins {
+    id 'net.ltgt.errorprone' version '0.0.8'
+    id 'edu.wpi.first.wpilib.versioning.WPILibVersioningPlugin' version '1.4'
+}
+
+allprojects {
+    repositories {
+        mavenCentral()
+    }
+}
+
+ext.compilerPrefixToUse = project.hasProperty('compilerPrefix') ? project.compilerPrefix : 'arm-frc-linux-gnueabi-'
+
+ext.buildArm = !project.hasProperty('skipArm')
+ext.buildNative = !project.hasProperty('skipNative')
+ext.buildx86 = !project.hasProperty('skipx86')
+
+if (hasProperty('makeDesktop')) {
+    println 'Making desktop classifier jar. NOTE: This desktop version should only be used for local testing.' +
+            'It will only support the current platform, and will override fetching the latest development version from' +
+            ' the maven repo until you manually delete it!'
+}
+
+ext.getPlatformPath2 = { targetPlatform ->
+    if (targetPlatform.architecture.arm) {
+        return 'Linux/arm'
+    } else if (targetPlatform.operatingSystem.linux) {
+        if (targetPlatform.architecture.amd64) {
+            return 'Linux/amd64'
+        } else {
+            return 'Linux/' + targetPlatform.architecture.name
+        }
+    } else if (targetPlatform.operatingSystem.windows) {
+        if (targetPlatform.architecture.amd64) {
+            return 'Windows/amd64'
+        } else {
+            return 'Windows/' + targetPlatform.architecture.name
+        }
+    } else if (targetPlatform.operatingSystem.macOsX) {
+        if (targetPlatform.architecture.amd64) {
+            return 'Mac OS X/x86_64'
+        } else {
+            return 'Mac OS X/' + targetPlatform.architecture.name
+        }
+    } else {
+        return targetPlatform.operatingSystem.name + '/' + targetPlatform.architecture.name
+    }
+}
+
+ext.getPlatformPath = { binary ->
+    return getPlatformPath2(binary.targetPlatform)
+}
+
+apply from: "locations.gradle"
+
+apply from: "properties.gradle"
+
+apply from: "dependencies.gradle"
+
+ext.setupDefines = { project, binaries ->
+    binaries.all {
+	if (project.hasProperty('debug')) {
+	    project.setupDebugDefines(cppCompiler, linker)
+	} else {
+	    project.setupReleaseDefines(cppCompiler, linker)
+	}
+        tasks.withType(CppCompile) {
+            if (!project.hasProperty('compilerPrefix') && targetPlatform.architecture.name == 'arm-v7') {
+                // RoboRio, Link Nothing
+            } else {
+                // Everything else, link cscore and wpiutil
+                project.addWpiUtilStaticLibraryLinks(it, linker, targetPlatform)
+                // CsCore not currently supported
+                if (!targetPlatform.operatingSystem.windows) {
+                    project.addCsCoreStaticLibraryLinks(it, linker, targetPlatform)
+                }
+            }
+            project.addOpenCvLibraryLinks(it, linker, targetPlatform)
+        }
+    }
+}
+
+apply from: "cpp.gradle"
+
+// Empty task for build so that zips will be
+// built when running ./gradlew build
+task build
+
+//apply from: "releases.gradle"
+
+task clean(type: Delete) {
+    description = "Deletes the build directory"
+    group = "Build"
+    delete buildDir
+}
+
+clean {
+    delete releaseDir
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.0'
+}
