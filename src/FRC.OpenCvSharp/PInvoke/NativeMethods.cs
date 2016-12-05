@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Security.Permissions;
@@ -65,7 +66,6 @@ namespace OpenCvSharp
         [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         static NativeMethods()
         {
-            Console.WriteLine("Using Native Thinggy");
             if (!s_libraryLoaded)
             {
                 try
@@ -90,7 +90,7 @@ namespace OpenCvSharp
                         }
                     }
 
-                    const string resourceRoot = "CameraServer.Native.Libraries.";
+                    const string resourceRoot = "FRC.OpenCvSharp.DesktopLibraries.Libraries.";
 
 
                     if (File.Exists("/usr/local/frc/bin/frcRunRobot.sh"))
@@ -112,9 +112,10 @@ namespace OpenCvSharp
                     {
                         NativeLoader = new NativeLibraryLoader();
                         NativeLoader.AddLibraryLocation(OsType.Windows32,
-                            resourceRoot + "x86.cscore.dll");
+                            resourceRoot + "x86.OpenCvSharpExtern.dll");
                         NativeLoader.AddLibraryLocation(OsType.Windows64,
-                            resourceRoot + "amd64.cscore.dll");
+                            resourceRoot + "amd64.OpenCvSharpExtern.dll");
+                            /*
                         NativeLoader.AddLibraryLocation(OsType.Linux32,
                             resourceRoot + "x86.libcscore.so");
                         NativeLoader.AddLibraryLocation(OsType.Linux64,
@@ -123,6 +124,7 @@ namespace OpenCvSharp
                             resourceRoot + "x86.libcscore.dylib");
                         NativeLoader.AddLibraryLocation(OsType.MacOs64,
                             resourceRoot + "amd64.libcscore.dylib");
+                            */
 
                         if (s_useCommandLineFile)
                         {
@@ -130,7 +132,22 @@ namespace OpenCvSharp
                         }
                         else
                         {
-                            NativeLoader.LoadNativeLibrary<NativeMethods>();
+                            // Load Reflection type from Native Libraries
+                            AssemblyName name = new AssemblyName("FRC.OpenCvSharp.DesktopLibraries");
+                            Assembly asm;
+                            try
+                            {
+                                asm = Assembly.Load(name);
+                            }
+                            catch(Exception)
+                            {
+                                Console.WriteLine("Failed to load desktop libraries. Please ensure that the FRC.NetworkTables.Core.DesktopLibraries is installed and referenced by your project");
+                                throw;
+                            }
+
+                            Type type = asm.GetType("OpenCvSharp.DesktopLibraries.Natives");
+
+                            NativeLoader.LoadNativeLibraryFromReflectedAssembly(type);
                             s_libraryLocation = NativeLoader.LibraryLocation;
                         }
                     }
