@@ -27,7 +27,7 @@ namespace OpenCvSharp
 
         private static readonly bool s_libraryLoaded;
         // ReSharper disable PrivateFieldCanBeConvertedToLocalVariable
-        internal static NativeLibraryLoader NativeLoader { get; }
+        public static NativeLibraryLoader NativeLoader { get; }
         private static readonly string s_libraryLocation;
         private static readonly bool s_useCommandLineFile;
         // ReSharper restore PrivateFieldCanBeConvertedToLocalVariable
@@ -95,7 +95,6 @@ namespace OpenCvSharp
 
                     if (File.Exists("/usr/local/frc/bin/frcRunRobot.sh"))
                     {
-                        Console.WriteLine("On RoboRIO");
                         NativeLoader = new NativeLibraryLoader();
                         // RoboRIO
                         if (s_useCommandLineFile)
@@ -128,7 +127,7 @@ namespace OpenCvSharp
 
                         if (s_useCommandLineFile)
                         {
-                            NativeLoader.LoadNativeLibrary<NativeMethods>(new RoboRioLibraryLoader(), s_libraryLocation, true);
+                            NativeLoader.LoadNativeLibrary<NativeMethods>(s_libraryLocation, true);
                         }
                         else
                         {
