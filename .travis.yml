@@ -16,8 +16,13 @@ mono:
   - 4.4.2
 os:  
   - linux
-  - osx
-osx_image: xcode7.1  
+
+addons:
+  apt:
+    packages:
+      - g++-multilib
+      - lib32stdc++6
+
 branches:  
   only:
     - master
@@ -29,4 +34,11 @@ install:
   - export PATH="$DOTNET_INSTALL_DIR:$PATH"    
 script:
   - ./netcore.sh
+
+before_cache:
+  - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
 

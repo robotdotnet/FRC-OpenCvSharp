@@ -22,6 +22,7 @@ function Build {
   dotnet restore
 
   dotnet build ./src/FRC.OpenCvSharp $configuration
+  ./gradlew build -PskipArm -Pskipx86
 }
 
 Build
