@@ -1,4 +1,4 @@
-using OpenCvSharp.PInvoke.NativeLibraryUtilties;
+using OpenCvSharp.PInvoke.NativeLibraryUtilities;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

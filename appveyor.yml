@@ -11,8 +11,6 @@ build_script:
 - ps: ./netcore.ps1 -build
 test_script:
 - ps: >-
-
-    ./netcore.ps1 -test
     
     If (($env:APPVEYOR_REPO_BRANCH -eq "master") -and (!$env:APPVEYOR_PULL_REQUEST_NUMBER)) {
 
