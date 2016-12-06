@@ -216,7 +216,7 @@ namespace OpenCvSharp.Util
         {
             while (test != typeof(object))
             {
-                if (test.IsGenericType)
+                if (test.GetTypeInfo().IsGenericType)
                 {
                     Type g = test.GetGenericTypeDefinition();
                     if (target == g)
@@ -224,7 +224,7 @@ namespace OpenCvSharp.Util
                         return true;
                     }
                 }
-                test = test.BaseType;
+                test = test.GetTypeInfo().BaseType;
             }
             return false;
         }
@@ -236,7 +236,7 @@ namespace OpenCvSharp.Util
         /// <returns></returns>
         public static int SizeOf(Type t)
         {
-            if (t.IsValueType)
+            if (t.GetTypeInfo().IsValueType)
             {
                 return Marshal.SizeOf(t);
             }

@@ -6,8 +6,10 @@ namespace OpenCvSharp.Blob
     /// <summary>
     /// Struct that contain information about one blob.
     /// </summary>
-    [Serializable]
-    public class CvBlob : ICloneable
+    #if !NETSTANDARD 
+    [Serializable] 
+    #endif
+    public class CvBlob
     {
         #region Init
 
@@ -289,11 +291,6 @@ namespace OpenCvSharp.Blob
                 U11 = U11,
                 U20 = U20,
             };
-        }
-
-        object ICloneable.Clone()
-        {
-            return Clone();
         }
 
         #endregion

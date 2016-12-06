@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using OpenCvSharp.Gpu;
 
 namespace OpenCvSharp
@@ -379,7 +380,7 @@ namespace OpenCvSharp
         /// <returns></returns>
         private static MatType EstimateType(Type t)
         {
-            if(!t.IsValueType)
+            if(!t.GetTypeInfo().IsValueType)
                 throw new ArgumentException();
 
             // Primitive types

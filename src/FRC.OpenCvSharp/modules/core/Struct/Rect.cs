@@ -6,7 +6,9 @@ namespace OpenCvSharp
     /// <summary>
     /// Stores a set of four integers that represent the location and size of a rectangle
     /// </summary>
-    [Serializable]
+    #if !NETSTANDARD 
+    [Serializable] 
+    #endif
     [StructLayout(LayoutKind.Sequential)]
     public struct Rect : IEquatable<Rect>
     {

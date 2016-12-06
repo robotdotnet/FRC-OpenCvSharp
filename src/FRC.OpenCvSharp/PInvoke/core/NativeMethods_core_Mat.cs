@@ -258,10 +258,10 @@ namespace OpenCvSharp
         public delegate IntPtr core_Mat_zeros2Delegate(int ndims, [MarshalAs(UnmanagedType.LPArray)] int[] sz, int type);
         [NativeDelegate("core_Mat_zeros2")] public static core_Mat_zeros2Delegate core_Mat_zeros2;
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public unsafe delegate sbyte* core_Mat_dumpDelegate(IntPtr self, [MarshalAs(UnmanagedType.LPStr)] string format);
+        public delegate IntPtr core_Mat_dumpDelegate(IntPtr self, [MarshalAs(UnmanagedType.LPStr)] string format);
         [NativeDelegate("core_Mat_dump")] public static core_Mat_dumpDelegate core_Mat_dump;
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public unsafe delegate void core_Mat_dump_deleteDelegate(sbyte* buf);
+        public delegate void core_Mat_dump_deleteDelegate(IntPtr buf);
         [NativeDelegate("core_Mat_dump_delete")] public static core_Mat_dump_deleteDelegate core_Mat_dump_delete;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]

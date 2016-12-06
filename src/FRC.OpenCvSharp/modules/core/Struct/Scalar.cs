@@ -5,7 +5,9 @@ namespace OpenCvSharp
     /// <summary>
     /// 
     /// </summary>
-    [Serializable]
+    #if !NETSTANDARD 
+    [Serializable] 
+    #endif
     public struct Scalar : IEquatable<Scalar>
     {
         #region Field

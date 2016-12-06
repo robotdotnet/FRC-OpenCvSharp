@@ -11,7 +11,9 @@ namespace OpenCvSharp
     /// The format-specific save parameters for cv::imwrite and cv::imencode
     /// </summary>
 #endif
-    [Serializable]
+    #if !NETSTANDARD 
+    [Serializable] 
+    #endif
     public class ImageEncodingParam
     {
 #if LANG_JP

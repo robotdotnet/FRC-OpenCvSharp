@@ -12,7 +12,9 @@ namespace OpenCvSharp
     /// circle structure retrieved from cvHoughCircle
     /// </summary>
 #endif
-    [Serializable]
+    #if !NETSTANDARD 
+    [Serializable] 
+    #endif
     [StructLayout(LayoutKind.Sequential)]
     public struct CircleSegment : IEquatable<CircleSegment>
     {

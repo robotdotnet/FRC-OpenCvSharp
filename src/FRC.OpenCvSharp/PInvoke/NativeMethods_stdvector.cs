@@ -513,7 +513,7 @@ namespace OpenCvSharp
         public delegate IntPtr vector_string_getPointerDelegate(IntPtr vector);
         [NativeDelegate("vector_string_getPointer")] public static vector_string_getPointerDelegate vector_string_getPointer;
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public unsafe delegate sbyte* vector_string_elemAtDelegate(IntPtr vector, int i);
+        public delegate IntPtr vector_string_elemAtDelegate(IntPtr vector, int i);
         [NativeDelegate("vector_string_elemAt")] public static vector_string_elemAtDelegate vector_string_elemAt;
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate void vector_string_deleteDelegate(IntPtr vector);

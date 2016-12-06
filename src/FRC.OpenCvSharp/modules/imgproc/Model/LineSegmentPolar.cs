@@ -12,7 +12,9 @@ namespace OpenCvSharp
     /// Polar line segment retrieved from cvHoughLines2
     /// </summary>
 #endif
-    [Serializable]
+    #if !NETSTANDARD 
+    [Serializable] 
+    #endif
     [StructLayout(LayoutKind.Sequential)]
     public struct LineSegmentPolar : IEquatable<LineSegmentPolar>
     {

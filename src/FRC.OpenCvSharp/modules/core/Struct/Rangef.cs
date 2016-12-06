@@ -6,7 +6,9 @@ namespace OpenCvSharp
     /// <summary>
     /// float Range class
     /// </summary>
-    [Serializable]
+    #if !NETSTANDARD 
+    [Serializable] 
+    #endif
     [StructLayout(LayoutKind.Sequential)]
     public struct Rangef
     {

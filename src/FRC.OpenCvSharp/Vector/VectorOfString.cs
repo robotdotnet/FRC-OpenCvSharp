@@ -107,8 +107,8 @@ namespace OpenCvSharp
             {
                 unsafe
                 {
-                    sbyte* p = NativeMethods.vector_string_elemAt(ptr, i);
-                    ret[i] = new string(p);
+                    IntPtr p = NativeMethods.vector_string_elemAt(ptr, i);
+                    ret[i] = NativeMethods.ReadDefaultString(p);
                 }
             }
             return ret;

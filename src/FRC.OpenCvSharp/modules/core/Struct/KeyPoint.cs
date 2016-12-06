@@ -12,7 +12,9 @@ namespace OpenCvSharp
     /// Data structure for salient point detectors
     /// </summary>
 #endif
-    [Serializable]
+    #if !NETSTANDARD 
+    [Serializable] 
+    #endif
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
     public struct KeyPoint : IEquatable<KeyPoint>
     {

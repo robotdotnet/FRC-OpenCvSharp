@@ -6,7 +6,9 @@ namespace OpenCvSharp
     /// <summary>
     /// 
     /// </summary>
-    [Serializable]
+    #if !NETSTANDARD 
+    [Serializable] 
+    #endif
     [StructLayout(LayoutKind.Sequential)]
     public struct Point3d : IEquatable<Point3d>
     {

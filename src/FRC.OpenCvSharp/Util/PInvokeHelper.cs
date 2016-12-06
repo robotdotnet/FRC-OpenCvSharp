@@ -51,19 +51,6 @@ namespace OpenCvSharp.Util
         public static OpenCvSharpException CreateException(Exception ex)
         {
             StringBuilder message = new StringBuilder();
-            if (System.Globalization.CultureInfo.CurrentCulture.Name.Contains("ja"))
-            {
-                message.AppendFormat("{0}\n", ex.Message);
-                message.Append("*** P/Invokeが原因で例外が発生しました。***\n")
-                    .Append("以下の項目を確認して下さい。\n")
-                    .Append("(1) OpenCVのDLLが実行ファイルと同じ場所に置かれていますか? またはパスが正しく通っていますか?\n")
-                    .Append("(2) Visual C++ Redistributable Packageをインストールしましたか?\n")
-                    .Append("(3) OpenCVのDLLやOpenCvSharpの対象プラットフォーム(x86またはx64)と、プロジェクトのプラットフォーム設定が合っていますか?\n")
-                    .Append("\n")
-                    .Append(ex.ToString());
-            }
-            else
-            {
                 message.AppendFormat("{0}\n", ex.Message);
                 message.Append("*** An exception has occurred because of P/Invoke. ***\n")
                     .Append("Please check the following:\n")
@@ -71,8 +58,7 @@ namespace OpenCvSharp.Util
                     .Append("(2) Visual C++ Redistributable Package has been installed.\n")
                     .Append("(3) The target platform(x86/x64) of OpenCV's DLL files and OpenCvSharp is the same as your project's.\n")
                     .Append("\n")
-                    .Append(ex.ToString());
-            }            
+                    .Append(ex.ToString());       
             return new OpenCvSharpException(message.ToString(), ex);
         }
     }

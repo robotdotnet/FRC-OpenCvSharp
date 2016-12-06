@@ -6,7 +6,9 @@ namespace OpenCvSharp
     /// <summary>
     /// 2-Tuple of float (System.Single)
     /// </summary>
-    [Serializable]
+    #if !NETSTANDARD 
+    [Serializable] 
+    #endif
     [StructLayout(LayoutKind.Sequential)]
     public struct Vec2f : IVec<float>
     {
@@ -63,7 +65,9 @@ namespace OpenCvSharp
     /// <summary>
     /// 3-Tuple of float (System.Single)
     /// </summary>
-    [Serializable]
+    #if !NETSTANDARD 
+    [Serializable] 
+    #endif
     [StructLayout(LayoutKind.Sequential)]
     public struct Vec3f : IVec<float>
     {
@@ -128,7 +132,9 @@ namespace OpenCvSharp
     /// <summary>
     /// 4-Tuple of float (System.Single)
     /// </summary>
-    [Serializable]
+    #if !NETSTANDARD 
+    [Serializable] 
+    #endif
     [StructLayout(LayoutKind.Sequential)]
     public struct Vec4f : IVec<float>
     {
@@ -204,7 +210,9 @@ namespace OpenCvSharp
     /// <summary>
     /// 6-Tuple of float (System.Single)
     /// </summary>
-    [Serializable]
+    #if !NETSTANDARD 
+    [Serializable] 
+    #endif
     [StructLayout(LayoutKind.Sequential)]
     public struct Vec6f : IVec<float>
     {

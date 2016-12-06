@@ -25,7 +25,7 @@ namespace OpenCvSharp.Blob
     /// <summary>
     /// Blob set
     /// </summary>
-    public class CvBlobs : Dictionary<int, CvBlob>, ICloneable
+    public class CvBlobs : Dictionary<int, CvBlob>
     {
         /// <summary>
         /// Label values
@@ -702,11 +702,6 @@ namespace OpenCvSharp.Blob
             newBlobs.Labels = Labels.Clone();
 
             return newBlobs;
-        }
-
-        object ICloneable.Clone()
-        {
-            return Clone();
         }
 
         #endregion

@@ -249,6 +249,7 @@ testrunner/
 
 *.project.lock.json
 src/FRC.OpenCvSharp/project.lock.json
+src/FRC.OpenCvSharp.DesktopLibraries/project.lock.json
 
 !OpenCVSharpExtern.def
 

@@ -156,7 +156,7 @@ namespace OpenCvSharp
         [NativeDelegate("core_FileStorage_getDefaultObjectName")] public static core_FileStorage_getDefaultObjectNameDelegate core_FileStorage_getDefaultObjectName;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public unsafe delegate sbyte* core_FileStorage_elnameDelegate(IntPtr obj);
+        public delegate IntPtr core_FileStorage_elnameDelegate(IntPtr obj);
         [NativeDelegate("core_FileStorage_elname")] public static core_FileStorage_elnameDelegate core_FileStorage_elname;
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate IntPtr core_FileStorage_structsDelegate(IntPtr obj, out IntPtr resultLength);

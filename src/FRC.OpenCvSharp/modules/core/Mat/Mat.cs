@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Reflection;
 using OpenCvSharp.Util;
 
 namespace OpenCvSharp
@@ -9,7 +10,7 @@ namespace OpenCvSharp
     /// <summary>
     /// OpenCV C++ n-dimensional dense array class (cv::Mat)
     /// </summary>
-    public partial class Mat : DisposableCvObject, ICloneable
+    public partial class Mat : DisposableCvObject
     {
         private bool disposed;
 
@@ -1867,11 +1868,6 @@ namespace OpenCvSharp
             return retVal;
         }
 
-        object ICloneable.Clone()
-        {
-            return Clone();
-        }
-
         /// <summary>
         /// Returns the partial Mat of the specified Mat
         /// </summary>
@@ -2545,11 +2541,11 @@ namespace OpenCvSharp
             string formatStr = GetDumpFormatString(format);
             unsafe
             {
-                sbyte* buf = null;
+                IntPtr buf = IntPtr.Zero;
                 try
                 {
                     buf = NativeMethods.core_Mat_dump(ptr, formatStr);
-                    return new string(buf);
+                    return NativeMethods.ReadDefaultString(buf);
                 }
                 finally
                 {
@@ -4499,7 +4495,7 @@ namespace OpenCvSharp
             where TMat : Mat, new()
         {
             var type = typeof (TMat);
-            var constructor = type.GetConstructor(new[] {typeof (Mat)});
+            var constructor = type.GetTypeInfo().GetConstructor(new[] {typeof (Mat)});
             if (constructor == null)
                 throw new OpenCvSharpException("Failed to cast to {0}", type.Name);
             return (TMat)constructor.Invoke(new object[] {this});

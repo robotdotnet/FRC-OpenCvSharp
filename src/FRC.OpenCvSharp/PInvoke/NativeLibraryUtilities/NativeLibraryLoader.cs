@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+using System.Runtime.InteropServices;
 using System.IO;
 using System.Reflection;
 
@@ -9,7 +9,7 @@ namespace OpenCvSharp.PInvoke.NativeLibraryUtilities
     /// <summary>
     /// This class handles loading of a native library
     /// </summary>
-    [ExcludeFromCodeCoverage]
+
     public class NativeLibraryLoader : ILibraryInformation
     {
         private readonly Dictionary<OsType, string> m_nativeLibraryName = new Dictionary<OsType, string>();

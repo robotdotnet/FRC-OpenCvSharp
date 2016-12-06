@@ -12,7 +12,9 @@ namespace OpenCvSharp
     /// Line segment structure retrieved from cvHoughLines2
     /// </summary>
 #endif
-    [Serializable]
+    #if !NETSTANDARD 
+    [Serializable] 
+    #endif
     [StructLayout(LayoutKind.Sequential)]
     public struct LineSegmentPoint : IEquatable<LineSegmentPoint>
     {

@@ -12,7 +12,9 @@ namespace OpenCvSharp.XFeatures2D
     /// The "Star" Detector
     /// </summary>
 #endif
-    [Serializable]
+    #if !NETSTANDARD 
+    [Serializable] 
+    #endif
     public class StarDetector : Feature2D
     {
         private bool disposed;

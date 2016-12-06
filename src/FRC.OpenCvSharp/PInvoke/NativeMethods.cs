@@ -4,9 +4,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Text;
 using System.Runtime.InteropServices;
 using System.Security;
+#if !NETSTANDARD
 using System.Security.Permissions;
+#endif
 using OpenCvSharp.Util;
 
 // ReSharper disable InconsistentNaming
@@ -17,7 +20,9 @@ namespace OpenCvSharp
     /// <summary>
     /// P/Invoke methods of OpenCV 2.x C++ interface
     /// </summary>
+    #if !NETSTANDARD
     [SuppressUnmanagedCodeSecurity]
+    #endif
     public partial class NativeMethods
     {
         /// <summary>
@@ -63,7 +68,9 @@ namespace OpenCvSharp
         /// <summary>
         /// Static constructor
         /// </summary>
+#if !NETSTANDARD
         [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
+#endif
         static NativeMethods()
         {
             if (!s_libraryLoaded)
@@ -185,16 +192,12 @@ namespace OpenCvSharp
                 var exception = PInvokeHelper.CreateException(e);
                 try{Console.WriteLine(exception.Message);}
                 catch{}
-                try{Debug.WriteLine(exception.Message);}
-                catch{}
                 throw exception;
             }
             catch (BadImageFormatException e)
             {
                 var exception = PInvokeHelper.CreateException(e);
                 try { Console.WriteLine(exception.Message); }
-                catch { }
-                try { Debug.WriteLine(exception.Message); }
                 catch { }
                 throw exception;
             }
@@ -203,31 +206,8 @@ namespace OpenCvSharp
                 Exception ex = e.InnerException ?? e;
                 try{ Console.WriteLine(ex.Message); }
                 catch{}
-                try{ Debug.WriteLine(ex.Message); }
-                catch{}
                 throw;
             }
-        }
-
-        /// <summary>
-        /// Returns whether the OS is Windows or not
-        /// </summary>
-        /// <returns></returns>
-        public static bool IsWindows()
-        {
-            return !IsUnix();
-        }
-
-        /// <summary>
-        /// Returns whether the OS is *nix or not
-        /// </summary>
-        /// <returns></returns>
-        public static bool IsUnix()
-        {
-            var p = Environment.OSVersion.Platform;
-            return (p == PlatformID.Unix ||
-                    p == PlatformID.MacOSX ||
-                    (int)p == 128);
         }
 
         /// <summary>
@@ -272,5 +252,25 @@ namespace OpenCvSharp
         /// </summary>
         public static CvErrorCallback ErrorHandlerDefault;
         #endregion
+
+        internal static string ReadDefaultString(IntPtr ptr)
+        {
+            var data = new List<byte>();
+            var off = 0;
+            while (true)
+            {
+                var ch = Marshal.ReadByte(ptr, off++);
+                if (ch == 0)
+                {
+                    break;
+                }
+                data.Add(ch);
+            }
+            #if !NETSTANDARD
+            return Encoding.Default.GetString(data.ToArray());
+            #else
+                return Encoding.GetEncoding(0).GetString(data.ToArray());
+            #endif
+        }
     }
 }

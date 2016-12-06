@@ -106,10 +106,10 @@ namespace OpenCvSharp
                     throw new ObjectDisposedException("FileStorage");
                 unsafe
                 {
-                    sbyte* buf = NativeMethods.core_FileStorage_elname(ptr);
-                    if (buf == null)
+                    IntPtr buf = NativeMethods.core_FileStorage_elname(ptr);
+                    if (buf == IntPtr.Zero)
                         return null;
-                    return new string(buf);
+                    return NativeMethods.ReadDefaultString(buf);
                 }
             }
         }

@@ -8,7 +8,9 @@ namespace OpenCvSharp
     /// <summary>
     /// 2-Tuple of ushort (System.UInt16)
     /// </summary>
-    [Serializable]
+    #if !NETSTANDARD 
+    [Serializable] 
+    #endif
     [StructLayout(LayoutKind.Sequential)]
     public struct Vec2w : IVec<ushort>
     {
@@ -72,7 +74,9 @@ namespace OpenCvSharp
     /// <summary>
     /// 3-Tuple of ushort (System.UInt16)
     /// </summary>
-    [Serializable]
+    #if !NETSTANDARD 
+    [Serializable] 
+    #endif
     [StructLayout(LayoutKind.Sequential)]
     public struct Vec3w : IVec<ushort>
     {
@@ -148,7 +152,9 @@ namespace OpenCvSharp
     /// <summary>
     /// 4-Tuple of ushort (System.UInt16)
     /// </summary>
+    #if !NETSTANDARD 
     [Serializable]
+    #endif
     [StructLayout(LayoutKind.Sequential)]
     public struct Vec4w : IVec<ushort>
     {
@@ -236,7 +242,9 @@ namespace OpenCvSharp
     /// <summary>
     /// 4-Tuple of ushort (System.UInt16)
     /// </summary>
-    [Serializable]
+    #if !NETSTANDARD 
+    [Serializable] 
+    #endif
     [StructLayout(LayoutKind.Sequential)]
     public struct Vec6w : IVec<ushort>
     {

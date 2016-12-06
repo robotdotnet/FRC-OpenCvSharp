@@ -1,4 +1,4 @@
-using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
@@ -7,7 +7,7 @@ namespace OpenCvSharp.PInvoke.NativeLibraryUtilities
     /// <summary>
     /// This class contains methods to initialize delegates 
     /// </summary>
-    [ExcludeFromCodeCoverage]
+
     public static class NativeDelegateInitializer
     {
         /// <summary>

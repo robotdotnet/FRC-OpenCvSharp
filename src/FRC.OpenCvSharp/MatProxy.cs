@@ -9,7 +9,9 @@ namespace OpenCvSharp
     /// DebuggrVisualizerにおいて、シリアライズ不可能なクラスをやり取りするために使うプロキシ。
     /// 送る際に、このProxyに表示に必要なシリアライズ可能なデータを詰めて送り、受信側で復元する。
     /// </summary>
-    [Serializable]
+    #if !NETSTANDARD 
+    [Serializable] 
+    #endif
     public class MatProxy : IDisposable
     {
         /// <summary>
