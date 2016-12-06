@@ -27,7 +27,8 @@
   },
   "buildOptions": {
     "allowUnsafe": true,
-    "xmlDoc": true
+    "xmlDoc": true,
+    "nowarn": [ "CS0649" ]
   },
   "frameworks": {
     "net45": {
