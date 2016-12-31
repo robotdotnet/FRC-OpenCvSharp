@@ -112,6 +112,31 @@ namespace OpenCvSharp
 
         #region Methods
 
+        public void ToList(List<Mat> list)
+        {
+            ToList<Mat>(list);
+        }
+
+        public void ToList<T>(List<T> list)
+            where T: Mat, new()
+        {
+            int size = Size;
+            list.Clear();
+            if (size == 0) return;
+
+            list.Capacity = size;
+
+            //T[] dst = new T[size];
+            IntPtr[] dstPtr = new IntPtr[size];
+            for (int i = 0; i < size; i++)
+            {
+                T m = new T();
+                list.Add(m);
+                dstPtr[i] = m.CvPtr;
+            }
+            NativeMethods.vector_Mat_assignToArray(ptr, dstPtr);
+        }
+
         /// <summary>
         /// Converts std::vector to managed array
         /// </summary>

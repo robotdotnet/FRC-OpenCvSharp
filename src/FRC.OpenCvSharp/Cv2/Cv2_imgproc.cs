@@ -2729,6 +2729,35 @@ namespace OpenCvSharp
             hierarchy.Fix();
         }
 
+        /// <summary>
+        /// Finds contours in a binary image.
+        /// </summary>
+        /// <param name="image">Source, an 8-bit single-channel image. Non-zero pixels are treated as 1’s. 
+        /// Zero pixels remain 0’s, so the image is treated as binary.
+        /// The function modifies the image while extracting the contours.</param> 
+        /// <param name="contours">Detected contours. Each contour is stored as a vector of points.</param>
+        /// <param name="mode">Contour retrieval mode</param>
+        /// <param name="method">Contour approximation method</param>
+        /// <param name="offset"> Optional offset by which every contour point is shifted. 
+        /// This is useful if the contours are extracted from the image ROI and then they should be analyzed in the whole image context.</param>
+        public static void FindContours(InputOutputArray image, List<MatOfPoint> contours, 
+            RetrievalModes mode, ContourApproximationModes method, Point? offset = null)
+        {
+             if (image == null)
+                throw new ArgumentNullException(nameof(image));
+            image.ThrowIfNotReady();
+
+            Point offset0 = offset.GetValueOrDefault(new Point());
+            IntPtr contoursPtr;
+            NativeMethods.imgproc_findContours2_OutputArray(image.CvPtr, out contoursPtr, (int)mode, (int)method, offset0);
+            image.Fix();
+
+            using (var contoursVec = new VectorOfMat(contoursPtr))
+            {
+                contoursVec.ToList<MatOfPoint>(contours);
+            }
+        }
+
 #if LANG_JP
         /// <summary>
         /// 2値画像中の輪郭を検出します．
