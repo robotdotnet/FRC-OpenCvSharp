@@ -4522,6 +4522,64 @@ namespace OpenCvSharp
                         contourIdx, color, thickness, (int)lineType, ToPtr(hierarchy), maxLevel, offset0);
             image.Fix();
         }
+
+        #if LANG_JP
+        /// <summary>
+        /// 輪郭線，または内側が塗りつぶされた輪郭を描きます．
+        /// </summary>
+        /// <param name="image">出力画像</param>
+        /// <param name="contours"> 入力される全輪郭．各輪郭は，点のベクトルとして格納されています．</param>
+        /// <param name="contourIdx">描かれる輪郭を示します．これが負値の場合，すべての輪郭が描画されます．</param>
+        /// <param name="color">輪郭の色．</param>
+        /// <param name="thickness">輪郭線の太さ．これが負値の場合（例えば thickness=CV_FILLED ），輪郭の内側が塗りつぶされます．</param>
+        /// <param name="lineType">線の連結性</param>
+        /// <param name="hierarchy">階層に関するオプションの情報．これは，特定の輪郭だけを描画したい場合にのみ必要になります．</param>
+        /// <param name="maxLevel">描画される輪郭の最大レベル．0ならば，指定された輪郭のみが描画されます．
+        /// 1ならば，指定された輪郭と，それに入れ子になったすべての輪郭が描画されます．2ならば，指定された輪郭と，
+        /// それに入れ子になったすべての輪郭，さらにそれに入れ子になったすべての輪郭が描画されます．このパラメータは， 
+        /// hierarchy が有効な場合のみ考慮されます．</param>
+        /// <param name="offset">輪郭をシフトするオプションパラメータ．指定された offset = (dx,dy) だけ，すべての描画輪郭がシフトされます．</param>
+#else
+        /// <summary>
+        /// draws contours in the image
+        /// </summary>
+        /// <param name="image">Destination image.</param>
+        /// <param name="contours">All the input contours. Each contour is stored as a point vector.</param>
+        /// <param name="contourIdx">Parameter indicating a contour to draw. If it is negative, all the contours are drawn.</param>
+        /// <param name="color">Color of the contours.</param>
+        /// <param name="thickness">Thickness of lines the contours are drawn with. If it is negative (for example, thickness=CV_FILLED ), 
+        /// the contour interiors are drawn.</param>
+        /// <param name="lineType">Line connectivity. </param>
+        /// <param name="hierarchy">Optional information about hierarchy. It is only needed if you want to draw only some of the contours</param>
+        /// <param name="maxLevel">Maximal level for drawn contours. If it is 0, only the specified contour is drawn. 
+        /// If it is 1, the function draws the contour(s) and all the nested contours. If it is 2, the function draws the contours, 
+        /// all the nested contours, all the nested-to-nested contours, and so on. This parameter is only taken into account 
+        /// when there is hierarchy available.</param>
+        /// <param name="offset">Optional contour shift parameter. Shift all the drawn contours by the specified offset = (dx, dy)</param>
+#endif
+        public static void DrawContours(
+            InputOutputArray image,
+            IEnumerable<MatOfPoint> contours,
+            int contourIdx,
+            Scalar color,
+            int thickness = 1,
+            LineTypes lineType = LineTypes.Link8,
+            Mat hierarchy = null,
+            int maxLevel = Int32.MaxValue,
+            Point? offset = null)
+        {
+            if (image == null)
+                throw new ArgumentNullException(nameof(image));
+            if (contours == null)
+                throw new ArgumentNullException(nameof(contours));
+            image.ThrowIfNotReady();
+
+            Point offset0 = offset.GetValueOrDefault(new Point());
+            IntPtr[] contoursPtr = EnumerableEx.SelectPtrs(contours);
+            NativeMethods.imgproc_drawContours_InputArray(image.CvPtr, contoursPtr, contoursPtr.Length,
+                        contourIdx, color, thickness, (int)lineType, ToPtr(hierarchy), maxLevel, offset0);
+            image.Fix();
+        }
         #endregion
 
         #region ClipLine
