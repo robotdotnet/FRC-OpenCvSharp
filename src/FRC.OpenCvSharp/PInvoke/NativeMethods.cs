@@ -147,7 +147,7 @@ namespace OpenCvSharp
                             }
                             catch(Exception)
                             {
-                                Console.WriteLine("Failed to load desktop libraries. Please ensure that the FRC.NetworkTables.Core.DesktopLibraries is installed and referenced by your project");
+                                Console.WriteLine("Failed to load desktop libraries. Please ensure that the FRC.OpenCvSharp.DesktopLibraries NuGet package is installed and referenced by your project");
                                 throw;
                             }
 
