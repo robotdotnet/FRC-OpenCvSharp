@@ -73,9 +73,7 @@ ext.setupDefines = { project, binaries ->
                 // Everything else, link cscore and wpiutil
                 project.addWpiUtilStaticLibraryLinks(it, linker, targetPlatform)
                 // CsCore not currently supported
-                if (!targetPlatform.operatingSystem.windows) {
-                    project.addCsCoreStaticLibraryLinks(it, linker, targetPlatform)
-                }
+                project.addCsCoreStaticLibraryLinks(it, linker, targetPlatform)
             }
             project.addOpenCvLibraryLinks(it, linker, targetPlatform)
         }

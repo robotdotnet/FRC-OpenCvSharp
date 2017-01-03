@@ -188,7 +188,7 @@ ext.useCsCore = { project ->
         def csCore
 
         doFirst {
-            def csCoreDependency = project.dependencies.create("edu.wpi.cscore.cpp:cscore:+:${project.isArm ? 'arm' : 'linux'}@zip")
+            def csCoreDependency = project.dependencies.create("edu.wpi.cscore.cpp:cscore:+:${project.isArm ? 'arm' : 'desktop'}@zip")
             def csCoreConfig = project.configurations.detachedConfiguration(csCoreDependency)
             csCoreConfig.setTransitive(false)
             csCore = csCoreConfig.files[0].canonicalFile
