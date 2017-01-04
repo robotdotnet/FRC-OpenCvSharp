@@ -28,7 +28,11 @@
   "buildOptions": {
     "embed": [
       "Libraries/amd64/OpenCvSharpExtern.dll",
-      "Libraries/x86/OpenCvSharpExtern.dll"
+      "Libraries/x86/OpenCvSharpExtern.dll",
+      "Libraries/amd64/libOpenCvSharpExtern.so",
+      "Libraries/x86/libOpenCvSharpExtern.so",
+      "Libraries/armhf/libOpenCvSharpExtern.so",
+      "Libraries/arm-raspbian/libOpenCvSharpExtern.so"
     ]
   },
   "frameworks": {

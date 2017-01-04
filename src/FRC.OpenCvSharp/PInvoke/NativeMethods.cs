@@ -99,63 +99,35 @@ namespace OpenCvSharp
 
                     const string resourceRoot = "FRC.OpenCvSharp.DesktopLibraries.Libraries.";
 
+                    NativeLoader = new NativeLibraryLoader();
+                    NativeLoader.AddLibraryLocation(OsType.Windows32,
+                        resourceRoot + "x86.OpenCvSharpExtern.dll");
+                    NativeLoader.AddLibraryLocation(OsType.Windows64,
+                        resourceRoot + "amd64.OpenCvSharpExtern.dll");
+                    NativeLoader.AddLibraryLocation(OsType.Linux32,
+                        resourceRoot + "x86.libOpenCvSharpExtern.so");
+                    NativeLoader.AddLibraryLocation(OsType.Linux64,
+                        resourceRoot + "amd64.libOpenCvSharpExtern.so");
+                    NativeLoader.AddLibraryLocation(OsType.roboRIO, "libOpenCvSharpExtern.so");
+                    NativeLoader.AddLibraryLocation(OsType.LinuxArmhf, 
+                        resourceRoot + "armhf.libOpenCvSharpExtern.so");
+                    NativeLoader.AddLibraryLocation(OsType.LinuxRaspbian, 
+                        resourceRoot + "arm-raspbian.libOpenCvSharpExtern.so");
+                        /*
+                    NativeLoader.AddLibraryLocation(OsType.MacOs32,
+                        resourceRoot + "x86.libcscore.dylib");
+                    NativeLoader.AddLibraryLocation(OsType.MacOs64,
+                        resourceRoot + "amd64.libcscore.dylib");
+                        */
 
-                    if (File.Exists("/usr/local/frc/bin/frcRunRobot.sh"))
+                    if (s_useCommandLineFile)
                     {
-                        NativeLoader = new NativeLibraryLoader();
-                        // RoboRIO
-                        if (s_useCommandLineFile)
-                        {
-                            NativeLoader.LoadNativeLibrary<NativeMethods>(new RoboRioLibraryLoader(), s_libraryLocation, true);
-                        }
-                        else
-                        {
-                            NativeLoader.LoadNativeLibrary<NativeMethods>(new RoboRioLibraryLoader(), "libOpenCvSharpExtern.so", true);
-                            s_libraryLocation = NativeLoader.LibraryLocation;
-                        }
+                        NativeLoader.LoadNativeLibrary<NativeMethods>(s_libraryLocation, true);
                     }
                     else
                     {
-                        NativeLoader = new NativeLibraryLoader();
-                        NativeLoader.AddLibraryLocation(OsType.Windows32,
-                            resourceRoot + "x86.OpenCvSharpExtern.dll");
-                        NativeLoader.AddLibraryLocation(OsType.Windows64,
-                            resourceRoot + "amd64.OpenCvSharpExtern.dll");
-                            /*
-                        NativeLoader.AddLibraryLocation(OsType.Linux32,
-                            resourceRoot + "x86.libcscore.so");
-                        NativeLoader.AddLibraryLocation(OsType.Linux64,
-                            resourceRoot + "amd64.libcscore.so");
-                        NativeLoader.AddLibraryLocation(OsType.MacOs32,
-                            resourceRoot + "x86.libcscore.dylib");
-                        NativeLoader.AddLibraryLocation(OsType.MacOs64,
-                            resourceRoot + "amd64.libcscore.dylib");
-                            */
-
-                        if (s_useCommandLineFile)
-                        {
-                            NativeLoader.LoadNativeLibrary<NativeMethods>(s_libraryLocation, true);
-                        }
-                        else
-                        {
-                            // Load Reflection type from Native Libraries
-                            AssemblyName name = new AssemblyName("FRC.OpenCvSharp.DesktopLibraries");
-                            Assembly asm;
-                            try
-                            {
-                                asm = Assembly.Load(name);
-                            }
-                            catch(Exception)
-                            {
-                                Console.WriteLine("Failed to load desktop libraries. Please ensure that the FRC.OpenCvSharp.DesktopLibraries NuGet package is installed and referenced by your project");
-                                throw;
-                            }
-
-                            Type type = asm.GetType("OpenCvSharp.DesktopLibraries.Natives");
-
-                            NativeLoader.LoadNativeLibraryFromReflectedAssembly(type);
-                            s_libraryLocation = NativeLoader.LibraryLocation;
-                        }
+                        NativeLoader.LoadNativeLibraryFromReflectedAssembly("FRC.OpenCvSharp.DesktopLibraries", "OpenCvSharp.DesktopLibraries.Natives");
+                        s_libraryLocation = NativeLoader.LibraryLocation;
                     }
 
                     NativeDelegateInitializer.SetupNativeDelegates<NativeMethods>(NativeLoader);
