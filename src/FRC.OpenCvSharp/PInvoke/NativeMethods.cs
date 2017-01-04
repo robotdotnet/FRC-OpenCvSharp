@@ -112,7 +112,7 @@ namespace OpenCvSharp
                     NativeLoader.AddLibraryLocation(OsType.LinuxArmhf, 
                         resourceRoot + "armhf.libOpenCvSharpExtern.so");
                     NativeLoader.AddLibraryLocation(OsType.LinuxRaspbian, 
-                        resourceRoot + "arm-raspbian.libOpenCvSharpExtern.so");
+                        resourceRoot + "arm_raspbian.libOpenCvSharpExtern.so");
                         /*
                     NativeLoader.AddLibraryLocation(OsType.MacOs32,
                         resourceRoot + "x86.libcscore.dylib");
