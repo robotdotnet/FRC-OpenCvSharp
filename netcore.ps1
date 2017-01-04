@@ -125,6 +125,9 @@ function Pack {
 
   exec { & dotnet pack src\FRC.OpenCvSharp.DesktopLibraries $configuration $revision --no-build -o .\artifacts }
 
+  # Removing the OpenCv desktop symbols package since it's too big to upload
+  Remove-Item .\artifacts\FRC.OpenCvSharp.DesktopLibraries.*.symbols.nupkg
+
   if ($env:APPVEYOR) {
     Get-ChildItem .\artifacts\*.nupkg | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name }
   }
