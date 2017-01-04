@@ -1,7 +1,7 @@
 ext.getOpenCvPlatformPackage = { targetPlatform ->
     if (targetPlatform.architecture.arm && project.hasProperty('compilerPrefix') && project.hasProperty('armSuffix')) {
         return "linux-arm${project.armSuffix}"
-    if (targetPlatform.architecture.arm) {
+    } else if (targetPlatform.architecture.arm) {
         return 'linux-arm'
     } else if (targetPlatform.operatingSystem.linux) {
         if (targetPlatform.architecture.amd64) {
