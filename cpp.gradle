@@ -42,7 +42,12 @@ def openCvZipTask = { project ->
         group = 'WPILib'
         destinationDir = project.buildDir
         baseName = 'OpenCvSharpExtern'
-        classifier = "${project.buildPlatform}"
+        if (project.isArm && project.hasProperty('compilerPrefix')
+            && project.hasProperty('armSuffix')) {
+            classifier = "${project.buildPlatform}${project.armSuffix}"
+        } else {
+            classifier = "${project.buildPlatform}"
+        }
         duplicatesStrategy = 'exclude'
 
         project.model {
