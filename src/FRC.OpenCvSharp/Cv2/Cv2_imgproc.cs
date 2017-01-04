@@ -2675,6 +2675,50 @@ namespace OpenCvSharp
             }
             image.Fix();
         }
+        #if LANG_JP
+        /// <summary>
+        /// 2値画像中の輪郭を検出します．
+        /// </summary>
+        /// <param name="image">入力画像，8ビット，シングルチャンネル．0以外のピクセルは 1として，0のピクセルは0のまま扱われます．
+        /// また，この関数は，輪郭抽出処理中に入力画像 image の中身を書き換えます．</param>
+        /// <param name="contours">検出された輪郭．各輪郭は，点のベクトルとして格納されます．</param>
+        /// <param name="hierarchy">画像のトポロジーに関する情報を含む出力ベクトル．これは，輪郭数と同じ数の要素を持ちます．各輪郭 contours[i] に対して，
+        /// 要素 hierarchy[i]のメンバにはそれぞれ，同じ階層レベルに存在する前後の輪郭，最初の子輪郭，および親輪郭の 
+        /// contours インデックス（0 基準）がセットされます．また，輪郭 i において，前後，親，子の輪郭が存在しない場合，
+        /// それに対応する hierarchy[i] の要素は，負の値になります．</param>
+        /// <param name="mode">輪郭抽出モード</param>
+        /// <param name="method">輪郭の近似手法</param>
+        /// <param name="offset">オプションのオフセット．各輪郭点はこの値の分だけシフトします．これは，ROIの中で抽出された輪郭を，画像全体に対して位置づけて解析する場合に役立ちます．</param>
+#else
+        /// <summary>
+        /// Finds contours in a binary image.
+        /// </summary>
+        /// <param name="image">Source, an 8-bit single-channel image. Non-zero pixels are treated as 1’s. 
+        /// Zero pixels remain 0’s, so the image is treated as binary.
+        /// The function modifies the image while extracting the contours.</param> 
+        /// <param name="contours">Detected contours. Each contour is stored as a vector of points.</param>
+        /// <param name="mode">Contour retrieval mode</param>
+        /// <param name="method">Contour approximation method</param>
+        /// <param name="offset"> Optional offset by which every contour point is shifted. 
+        /// This is useful if the contours are extracted from the image ROI and then they should be analyzed in the whole image context.</param>
+#endif
+        public static void FindContours(InputOutputArray image, out Point[][] contours,
+            RetrievalModes mode, ContourApproximationModes method, Point? offset = null)
+        {
+            if (image == null)
+                throw new ArgumentNullException(nameof(image));
+            image.ThrowIfNotReady();
+
+            Point offset0 = offset.GetValueOrDefault(new Point());
+            IntPtr contoursPtr;
+            NativeMethods.imgproc_findContours2_vector(image.CvPtr, out contoursPtr, (int)mode, (int)method, offset0);
+
+            using (var contoursVec = new VectorOfVectorPoint(contoursPtr))
+            {
+                contours = contoursVec.ToArray();
+            }
+            image.Fix();
+        }
 #if LANG_JP
         /// <summary>
         /// 2値画像中の輪郭を検出します．
