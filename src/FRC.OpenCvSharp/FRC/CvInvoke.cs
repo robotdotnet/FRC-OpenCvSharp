@@ -4,14 +4,14 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
-namespace OpenCvSharp
+namespace OpenCvSharp.FRC
 {
     /// <summary>
     /// This class contains optimized version of the most common OpenCv operations for FRC
     /// </summary>
-    public static class FRC
+    public static class CvInvoke
     {
-        public static void ConvertToHSV(Mat input, Mat output)
+        public static void CvtColor(InputArray input, InputOutputArray output, ColorConversionCodes code, int dstCn = 0)
         {
             if (input == null)
                 throw new ArgumentNullException(nameof(input));
@@ -19,24 +19,11 @@ namespace OpenCvSharp
                 throw new ArgumentNullException(nameof(output));
             input.ThrowIfDisposed();
             output.ThrowIfDisposed();
-
-            NativeMethods.imgproc_cvtColor(input.CvPtr, input.CvPtr, (int)ColorConversionCodes.BGR2HSV, 0);
+            NativeMethods.imgproc_cvtColor(input.CvPtr, input.CvPtr, (int)code, dstCn);
         }
 
-        public static void ConvertToHLS(Mat input, Mat output)
-        {
-            if (input == null)
-                throw new ArgumentNullException(nameof(input));
-            if (output == null)
-                throw new ArgumentNullException(nameof(output));
-            input.ThrowIfDisposed();
-            output.ThrowIfDisposed();
-
-            NativeMethods.imgproc_cvtColor(input.CvPtr, input.CvPtr, (int)ColorConversionCodes.BGR2HLS, 0);
-        }
-
-        public static void InRange(Mat input, IList<double> hue, IList<double> sat,
-            IList<double> val, Mat output)
+        public static void InRange(InputArray input, IList<double> hue, IList<double> sat,
+            IList<double> val, OutputArray output)
         {
             if (input == null)
                 throw new ArgumentNullException(nameof(input));
@@ -61,7 +48,7 @@ namespace OpenCvSharp
                 new Scalar(hue[1], sat[1], val[1]), output.CvPtr);
         }
 
-        public static void InRange(Mat input, IList<double> low, IList<double> high, Mat output)
+        public static void InRange(InputArray input, IList<double> low, IList<double> high, OutputArray output)
         {
             if (input == null)
                 throw new ArgumentNullException(nameof(input));
