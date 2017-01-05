@@ -467,11 +467,16 @@ namespace OpenCvSharp
         public delegate void vector_vector_Point_getSize2Delegate(IntPtr vector, [In, Out] IntPtr[] size);
         [NativeDelegate("vector_vector_Point_getSize2")] public static vector_vector_Point_getSize2Delegate vector_vector_Point_getSize2;
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public unsafe delegate void vector_vector_Point_getSize2PtrDelegate(IntPtr vector, IntPtr* size);
+        [NativeDelegate("vector_vector_Point_getSize2")] public static vector_vector_Point_getSize2PtrDelegate vector_vector_Point_getSize2Ptr;
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate IntPtr vector_vector_Point_getPointerDelegate(IntPtr vector);
         [NativeDelegate("vector_vector_Point_getPointer")] public static vector_vector_Point_getPointerDelegate vector_vector_Point_getPointer;
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate void vector_vector_Point_copyDelegate(IntPtr vec, IntPtr[] dst);
         [NativeDelegate("vector_vector_Point_copy")] public static vector_vector_Point_copyDelegate vector_vector_Point_copy;
+        public unsafe delegate void vector_vector_Point_copy2Delegate(IntPtr vec, IntPtr* dst);
+        [NativeDelegate("vector_vector_Point_copy")] public static vector_vector_Point_copy2Delegate vector_vector_Point_copy2;
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate void vector_vector_Point_deleteDelegate(IntPtr vector);
         [NativeDelegate("vector_vector_Point_delete")] public static vector_vector_Point_deleteDelegate vector_vector_Point_delete;
