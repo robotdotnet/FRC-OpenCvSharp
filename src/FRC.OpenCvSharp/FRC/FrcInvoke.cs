@@ -21,34 +21,6 @@ namespace OpenCvSharp.FRC
             Cv2.CvtColor(src, dst, code, dstCn);
         }
 
-        public static void InRange(InputArray input, IList<double> hue, IList<double> sat,
-            IList<double> val, OutputArray output)
-        {
-            if (input == null)
-                throw new ArgumentNullException(nameof(input));
-            if (output == null)
-                throw new ArgumentNullException(nameof(output));
-            if (hue == null)
-                throw new ArgumentNullException(nameof(hue));
-            if (sat == null)
-                throw new ArgumentNullException(nameof(sat));
-            if (val == null)
-                throw new ArgumentNullException(nameof(val));
-            if (hue.Count < 2)
-                throw new ArgumentOutOfRangeException(nameof(hue), "List must have at least a count of 2");
-            if (sat.Count < 2)
-                throw new ArgumentOutOfRangeException(nameof(sat), "List must have at least a count of 2");
-            if (val.Count < 2)
-                throw new ArgumentOutOfRangeException(nameof(val), "List must have at least a count of 2");
-            input.ThrowIfDisposed();
-            output.ThrowIfNotReady();
-            NativeMethods.frc_inRange(input.CvPtr,
-                new Scalar(hue[0], sat[0], val[0]),
-                new Scalar(hue[1], sat[1], val[1]), output.CvPtr);
-            GC.KeepAlive(input);
-            output.Fix();
-        }
-
          /// <summary>
         /// set mask elements for those array elements which are within the element-specific bounding box (dst = lowerb &lt;= src &amp;&amp; src &lt; upperb)
         /// </summary>
@@ -79,6 +51,17 @@ namespace OpenCvSharp.FRC
             output.Fix();
         }
 
+        /// <summary>
+        /// Finds contours in a binary image.
+        /// </summary>
+        /// <param name="input">Source, an 8-bit single-channel image. Non-zero pixels are treated as 1’s. 
+        /// Zero pixels remain 0’s, so the image is treated as binary.
+        /// The function modifies the image while extracting the contours.</param> 
+        /// <param name="contours">Detected contours. Each contour is stored as a vector of points.</param>
+        /// <param name="mode">Contour retrieval mode</param>
+        /// <param name="method">Contour approximation method</param>
+        /// <param name="offset"> Optional offset by which every contour point is shifted. 
+        /// This is useful if the contours are extracted from the image ROI and then they should be analyzed in the whole image context.</param>
         public static void FindContours(InputOutputArray input, ListOfPointArray contours, RetrievalModes mode, ContourApproximationModes method,
             Point? offset = null)
         {
@@ -91,6 +74,22 @@ namespace OpenCvSharp.FRC
             input.Fix();
         }
 
+        /// <summary>
+        /// Finds contours in a binary image.
+        /// </summary>
+        /// <param name="input">Source, an 8-bit single-channel image. Non-zero pixels are treated as 1’s. 
+        /// Zero pixels remain 0’s, so the image is treated as binary.
+        /// The function modifies the image while extracting the contours.</param> 
+        /// <param name="contours">Detected contours. Each contour is stored as a vector of points.</param>
+        /// <param name="hierarchy">Optional output vector, containing information about the image topology. 
+        /// It has as many elements as the number of contours. For each i-th contour contours[i], 
+        /// the members of the elements hierarchy[i] are set to 0-based indices in contours of the next 
+        /// and previous contours at the same hierarchical level, the first child contour and the parent contour, respectively. 
+        /// If for the contour i there are no next, previous, parent, or nested contours, the corresponding elements of hierarchy[i] will be negative.</param>
+        /// <param name="mode">Contour retrieval mode</param>
+        /// <param name="method">Contour approximation method</param>
+        /// <param name="offset"> Optional offset by which every contour point is shifted. 
+        /// This is useful if the contours are extracted from the image ROI and then they should be analyzed in the whole image context.</param>
         public static void FindContours(InputOutputArray input, ListOfPointArray contours, List<HierarchyIndex> hierarchy, RetrievalModes mode,
             ContourApproximationModes method, Point? offset = null)
         {
@@ -119,9 +118,25 @@ namespace OpenCvSharp.FRC
             input.Fix();
         }
 
+        /// <summary>
+        /// Find contours in a binary image, and then runs a Convex Hull on all contours
+        /// </summary>
+        /// <param name="input">Source, an 8-bit single-channel image. Non-zero pixels are treated as 1’s. 
+        /// Zero pixels remain 0’s, so the image is treated as binary.
+        /// The function modifies the image while extracting the contours.</param> 
+        /// <param name="contours">Detected contours. Each contour is stored as a vector of points.</param>
+        /// <param name="mode">Contour retrieval mode</param>
+        /// <param name="method">Contour approximation method</param>
+        /// <param name="offset"> Optional offset by which every contour point is shifted. 
+        /// This is useful if the contours are extracted from the image ROI and then they should be analyzed in the whole image context.</param>
+        /// <param name="clockwise">If true, the output convex hull will be oriented clockwise, 
+        /// otherwise it will be oriented counter-clockwise. Here, the usual screen coordinate 
+        /// system is assumed - the origin is at the top-left corner, x axis is oriented to the right, 
+        /// and y axis is oriented downwards.</param>
         public static void FindContoursConvexHull(InputOutputArray input, ListOfPointArray contours, ListOfPointArray hulls, RetrievalModes mode,
             ContourApproximationModes method, bool clockwise = false, Point? offset = null)
         {
+
             if (input == null)
                 throw new ArgumentNullException(nameof(input));
             input.ThrowIfDisposed();
@@ -131,6 +146,22 @@ namespace OpenCvSharp.FRC
             input.Fix();
         }
 
+        /// <summary>
+        /// draws contours in the image
+        /// </summary>
+        /// <param name="image">Destination image.</param>
+        /// <param name="contours">All the input contours. Each contour is stored as a point vector.</param>
+        /// <param name="contourIdx">Parameter indicating a contour to draw. If it is negative, all the contours are drawn.</param>
+        /// <param name="color">Color of the contours.</param>
+        /// <param name="thickness">Thickness of lines the contours are drawn with. If it is negative (for example, thickness=CV_FILLED ), 
+        /// the contour interiors are drawn.</param>
+        /// <param name="lineType">Line connectivity. </param>
+        /// <param name="hierarchy">Optional information about hierarchy. It is only needed if you want to draw only some of the contours</param>
+        /// <param name="maxLevel">Maximal level for drawn contours. If it is 0, only the specified contour is drawn. 
+        /// If it is 1, the function draws the contour(s) and all the nested contours. If it is 2, the function draws the contours, 
+        /// all the nested contours, all the nested-to-nested contours, and so on. This parameter is only taken into account 
+        /// when there is hierarchy available.</param>
+        /// <param name="offset">Optional contour shift parameter. Shift all the drawn contours by the specified offset = (dx, dy)</param>
         public static void DrawContours(
             InputOutputArray image,
             ListOfPointArray contours,
