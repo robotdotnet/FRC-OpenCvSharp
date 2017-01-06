@@ -126,7 +126,7 @@ namespace OpenCvSharp
                     }
                     else
                     {
-                        NativeLoader.LoadNativeLibraryFromReflectedAssembly("FRC.OpenCvSharp.DesktopLibraries", "OpenCvSharp.DesktopLibraries.Natives");
+                        NativeLoader.LoadNativeLibraryFromReflectedAssembly("FRC.OpenCvSharp.DesktopLibraries");
                         s_libraryLocation = NativeLoader.LibraryLocation;
                     }
 

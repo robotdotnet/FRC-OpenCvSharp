@@ -133,7 +133,6 @@ namespace OpenCvSharp.FRC
         private void CopyFromNative()
         {
             if (_copied) return;
-            Console.WriteLine("Perfomring Copy");
             _copied = true;
             var size = _nativeVector.Size1;
             _sizes.Clear();
