@@ -5,6 +5,8 @@ using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using NativeLibraryUtilities;
 
+#pragma warning disable 1591
+
 namespace OpenCvSharp
 {
     public partial class NativeMethods
