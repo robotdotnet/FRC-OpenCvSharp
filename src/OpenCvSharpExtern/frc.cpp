@@ -32,6 +32,7 @@ CVAPI(void) frc_convexHull_vector(std::vector<cv::Point> *contours, std::vector<
 CVAPI(void) frc_convexHull_all_vector(std::vector<std::vector<cv::Point> > *contours, std::vector<std::vector<cv::Point> > *hulls,
     int clockwise, int returnPoints)
 {
+    hulls->clear();
     hulls->reserve(contours->size());
     int count = 0;
     for (auto&& i : *contours) {
@@ -44,6 +45,7 @@ CVAPI(void) frc_findContours_convexHull(cv::_InputOutputArray * input, std::vect
     int method, CvPoint offset, int clockwise, int returnPoints)
 {
     cv::findContours(*input, *contours, mode, method, offset);
+    hulls->clear();
     hulls->reserve(contours->size());
     int count = 0;
     for (auto&& i : *contours) {
