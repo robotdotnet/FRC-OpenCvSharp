@@ -256,3 +256,5 @@ src/FRC.OpenCvSharp.DesktopLibraries/project.lock.json
 src/FRC.OpenCvSharp.DesktopLibraries/Libraries/temp/
 !src/FRC.OpenCvSharp.DesktopLibraries/Libraries/amd64/*
 !src/FRC.OpenCvSharp.DesktopLibraries/Libraries/x86/*
+!src/FRC.OpenCvSharp.DesktopLibraries/Libraries/armhf/*
+!src/FRC.OpenCvSharp.DesktopLibraries/Libraries/arm-raspbian/*
