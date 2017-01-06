@@ -24,7 +24,8 @@ model {
                 // arm, and doesn't understand this flag, so it is removed from both
                 cppCompiler.withArguments { args ->
                     args << '-std=c++1y' << '-Wformat=2' << '-Wall' << '-Wextra' << '-Werror' << '-pedantic'
-                    args << '-Wno-psabi' << '-Wno-unused-parameter' << '-fPIC' << '-rdynamic'
+                    args << '-Wno-psabi' << '-Wno-unused-parameter' << '-fPIC' << '-rdynamic' << '-Wno-unused-function'
+                    args << '-Wno-unknown-pragmas'
                     //TODO: When the compiler allows us to actually call deprecated functions from within
                     // deprecated function, remove this line (this will cause calling deprecated functions
                     // to be treated as a warning rather than an error).
