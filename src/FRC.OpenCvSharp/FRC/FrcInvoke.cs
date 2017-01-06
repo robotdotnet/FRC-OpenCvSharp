@@ -124,7 +124,8 @@ namespace OpenCvSharp.FRC
         /// <param name="input">Source, an 8-bit single-channel image. Non-zero pixels are treated as 1’s. 
         /// Zero pixels remain 0’s, so the image is treated as binary.
         /// The function modifies the image while extracting the contours.</param> 
-        /// <param name="contours">Detected contours. Each contour is stored as a vector of points.</param>
+        /// <param name="contours">Detected contours. Each contour is stored as an array of points.</param>
+        /// <param name="hulls">The output convex hulls.  Each hull is stored as an array of points.</param>
         /// <param name="mode">Contour retrieval mode</param>
         /// <param name="method">Contour approximation method</param>
         /// <param name="offset"> Optional offset by which every contour point is shifted. 
