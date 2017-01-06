@@ -1985,3 +1985,12 @@ flann_SavedIndexParams_new
 flann_SavedIndexParams_delete
 flann_SearchParams_new
 flann_SearchParams_delete
+
+frc_findContours_convexHull
+frc_convexHull_all_vector
+frc_convexHull_vector
+frc_findContours_Hierarchy
+frc_findContours_noHierarchy
+frc_inRange
+frc_cvtColor
+frc_drawContours

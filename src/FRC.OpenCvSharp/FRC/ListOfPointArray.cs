@@ -22,6 +22,8 @@ namespace OpenCvSharp.FRC
             }
         }
 
+        internal VectorOfVectorPoint NativeVectorDraw => _nativeVector;
+
         public void Dispose()
         {
             _nativeVector.Dispose();
@@ -31,6 +33,7 @@ namespace OpenCvSharp.FRC
         {
             _points = new List<Point[]>();
             _sizes = new NativeList<IntPtr>();
+            _gcHandles = new NativeList<GCHandle>();
             _nativeVector = new VectorOfVectorPoint();
         }
 
@@ -38,6 +41,7 @@ namespace OpenCvSharp.FRC
         {
             _points = new List<Point[]>(capacity);
             _sizes = new NativeList<IntPtr>(capacity);
+            _gcHandles = new NativeList<GCHandle>(capacity);
             _nativeVector = new VectorOfVectorPoint(capacity);
         }
 
@@ -129,6 +133,7 @@ namespace OpenCvSharp.FRC
         private void CopyFromNative()
         {
             if (_copied) return;
+            Console.WriteLine("Perfomring Copy");
             _copied = true;
             var size = _nativeVector.Size1;
             _sizes.Clear();
