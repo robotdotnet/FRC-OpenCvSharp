@@ -118,6 +118,31 @@ task copyOutputs(type: Copy) {
     }
 }
 
+task copyToNet(type: Copy) {
+    destinationDir = file("${rootDir}/src/FRC.OpenCvSharp.DesktopLibraries/Libraries")
+
+    project(':native').model {
+        binaries {
+            withType(SharedLibraryBinarySpec) { binary ->
+                from(binary.sharedLibraryFile) {
+                    if (targetPlatform.architecture.amd64) {
+                        into 'amd64'
+                    } else {
+                        into targetPlatform.architecture.name
+                    }
+                }
+            }
+        }
+    }
+}
+
+project(':native').tasks.whenTaskAdded { task ->
+    def name = task.name.toLowerCase()
+    if (name.contains("sharedlibrary") || name.contains("staticlibrary")) {
+        copyToNet.dependsOn task
+    }
+}
+
 build.dependsOn copyOutputs
 
 clean {
