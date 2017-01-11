@@ -11,9 +11,9 @@ ext.getOpenCvPlatformPackage = { targetPlatform ->
         }
     } else if (targetPlatform.operatingSystem.windows) {
         if (targetPlatform.architecture.amd64) {
-            return 'windows-x86_64'
+            return 'windows-x86_64_2015'
         } else {
-            return 'windows-' + targetPlatform.architecture.name
+            return 'windows-' + targetPlatform.architecture.name + '_2015'
         }
     } else if (targetPlatform.operatingSystem.macOsX) {
         if (targetPlatform.architecture.amd64) {
@@ -125,6 +125,20 @@ ext.useOpenCv = { project ->
     }
 }
 
+ext.getWpiLibDeps = { project, cs = false ->
+    if (project.isArm && project.hasProperty('compilerPrefix') && project.hasProperty('armSuffix')) {
+        return "arm${project.armSuffix}"
+    } else if (project.isArm) {
+        return 'arm'
+    } else if (System.getProperty("os.name").startsWith("Windows")) {
+        return 'windows2015'
+    } else if (cs) {
+        return 'linux'
+    } else {
+        return 'desktop'
+    }
+}
+
 ext.useWpiUtil = { project ->
     project.tasks.create(name: "downloadWpiUtil") {
         description = 'Downloads the wpiutil maven dependency.'
@@ -135,12 +149,7 @@ ext.useWpiUtil = { project ->
         def wpiUtil
 
         doFirst {
-            def wpiUtilDependency
-            if (project.isArm && project.hasProperty('compilerPrefix') && project.hasProperty('armSuffix')) {
-                wpiUtilDependency = project.dependencies.create("edu.wpi.first.wpilib:wpiutil:+:arm${project.armSuffix}@zip")
-            } else {
-                wpiUtilDependency = project.dependencies.create("edu.wpi.first.wpilib:wpiutil:+:${project.isArm ? 'arm' : 'desktop'}@zip")
-            }
+            def wpiUtilDependency = project.dependencies.create("edu.wpi.first.wpilib:wpiutil:+:${project.getWpiLibDeps(project)}@zip")
             def wpiUtilConfig = project.configurations.detachedConfiguration(wpiUtilDependency)
             wpiUtilConfig.setTransitive(false)
             wpiUtil = wpiUtilConfig.files[0].canonicalFile
@@ -195,12 +204,7 @@ ext.useCsCore = { project ->
         def csCore
 
         doFirst {
-            def csCoreDependency
-            if (project.isArm && project.hasProperty('compilerPrefix') && project.hasProperty('armSuffix')) {
-                csCoreDependency = project.dependencies.create("edu.wpi.cscore.cpp:cscore:+:arm${project.armSuffix}@zip")
-            } else {
-                csCoreDependency = project.dependencies.create("edu.wpi.cscore.cpp:cscore:+:${project.isArm ? 'arm' : 'desktop'}@zip")
-            }
+            def csCoreDependency = project.dependencies.create("edu.wpi.cscore.cpp:cscore:+:${project.getWpiLibDeps(project, true)}@zip")
             def csCoreConfig = project.configurations.detachedConfiguration(csCoreDependency)
             csCoreConfig.setTransitive(false)
             csCore = csCoreConfig.files[0].canonicalFile
