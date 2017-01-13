@@ -258,3 +258,6 @@ src/FRC.OpenCvSharp.DesktopLibraries/Libraries/temp/
 !src/FRC.OpenCvSharp.DesktopLibraries/Libraries/x86/*
 !src/FRC.OpenCvSharp.DesktopLibraries/Libraries/armhf/*
 !src/FRC.OpenCvSharp.DesktopLibraries/Libraries/arm-raspbian/*
+
+src/FRC.OpenCvSharp.DesktopLibraries/Libraries/amd64/OpenCvSharpExtern.dll
+src/FRC.OpenCvSharp.DesktopLibraries/Libraries/x86/OpenCvSharpExtern.dll

@@ -11,8 +11,6 @@ allprojects {
     }
 }
 
-ext.compilerPrefixToUse = project.hasProperty('compilerPrefix') ? project.compilerPrefix : 'arm-frc-linux-gnueabi-'
-
 ext.buildArm = !project.hasProperty('skipArm')
 ext.buildNative = !project.hasProperty('skipNative')
 ext.buildx86 = !project.hasProperty('skipx86')
@@ -86,16 +84,69 @@ apply from: "cpp.gradle"
 // built when running ./gradlew build
 task build
 
-//apply from: "releases.gradle"
-
 task clean(type: Delete) {
     description = "Deletes the build directory"
     group = "Build"
     delete buildDir
 }
 
+def outputDir = file("${rootDir}/output")
+
+task copyOutputs(type: Copy) {
+    destinationDir = outputDir
+    def ntv = project(":native")
+    dependsOn ntv.opencvZip
+    def arm = project(":arm")
+    if (buildArm) {
+        dependsOn arm.opencvZip
+    }
+    from (ntv.opencvZip.outputs) {}
+    if (buildArm) {
+        from (arm.opencvZip.outputs) {}
+    }
+    if (project.hasProperty("copywpilibs")) {
+        dependsOn ntv.depsZip
+        from (ntv.depsZip.outputs) {
+            into project.getWpiLibDeps(ntv)
+        }
+        if (buildArm) {
+            dependsOn arm.depsZip
+            from (arm.depsZip.outputs) {
+                into project.getWpiLibDeps(arm)
+            }
+        }
+    }
+}
+
+task copyToNet(type: Copy) {
+    destinationDir = file("${rootDir}/src/FRC.OpenCvSharp.DesktopLibraries/Libraries")
+
+    project(':native').model {
+        binaries {
+            withType(SharedLibraryBinarySpec) { binary ->
+                from(binary.sharedLibraryFile) {
+                    if (targetPlatform.architecture.amd64) {
+                        into 'amd64'
+                    } else {
+                        into targetPlatform.architecture.name
+                    }
+                }
+            }
+        }
+    }
+}
+
+project(':native').tasks.whenTaskAdded { task ->
+    def name = task.name.toLowerCase()
+    if (name.contains("sharedlibrary") || name.contains("staticlibrary")) {
+        copyToNet.dependsOn task
+    }
+}
+
+build.dependsOn copyOutputs
+
 clean {
-    delete releaseDir
+    delete outputDir
 }
 
 task wrapper(type: Wrapper) {

@@ -110,6 +110,11 @@ function UploadAppVeyorTestResults {
 }
 
 function Build {
+  # build native library first
+  ./gradlew copyToNet -PreleaseType=OFFICIAL
+
+  if($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode )  }
+
   exec { & dotnet restore }
   echo $configuration
   
