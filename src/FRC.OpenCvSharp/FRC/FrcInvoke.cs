@@ -21,7 +21,7 @@ namespace OpenCvSharp.FRC
             Cv2.CvtColor(src, dst, code, dstCn);
         }
 
-         /// <summary>
+        /// <summary>
         /// set mask elements for those array elements which are within the element-specific bounding box (dst = lowerb &lt;= src &amp;&amp; src &lt; upperb)
         /// </summary>
         /// <param name="input">The first source array</param>
@@ -62,7 +62,8 @@ namespace OpenCvSharp.FRC
         /// <param name="method">Contour approximation method</param>
         /// <param name="offset"> Optional offset by which every contour point is shifted. 
         /// This is useful if the contours are extracted from the image ROI and then they should be analyzed in the whole image context.</param>
-        public static void FindContours(InputOutputArray input, ListOfPointArray contours, RetrievalModes mode, ContourApproximationModes method,
+        public static void FindContours(InputOutputArray input, ListOfPointArray contours, RetrievalModes mode,
+            ContourApproximationModes method,
             Point? offset = null)
         {
             if (input == null)
@@ -70,7 +71,8 @@ namespace OpenCvSharp.FRC
             input.ThrowIfDisposed();
 
             Point offset0 = offset.GetValueOrDefault();
-            NativeMethods.frc_findContours_noHierarchy(input.CvPtr, contours.NativeVector.CvPtr, (int)mode, (int)method, offset0);
+            NativeMethods.frc_findContours_noHierarchy(input.CvPtr, contours.NativeVector.CvPtr, (int) mode,
+                (int) method, offset0);
             input.Fix();
         }
 
@@ -90,7 +92,8 @@ namespace OpenCvSharp.FRC
         /// <param name="method">Contour approximation method</param>
         /// <param name="offset"> Optional offset by which every contour point is shifted. 
         /// This is useful if the contours are extracted from the image ROI and then they should be analyzed in the whole image context.</param>
-        public static void FindContours(InputOutputArray input, ListOfPointArray contours, List<HierarchyIndex> hierarchy, RetrievalModes mode,
+        public static void FindContours(InputOutputArray input, ListOfPointArray contours,
+            List<HierarchyIndex> hierarchy, RetrievalModes mode,
             ContourApproximationModes method, Point? offset = null)
         {
             if (hierarchy == null)
@@ -104,7 +107,8 @@ namespace OpenCvSharp.FRC
 
             Point offset0 = offset.GetValueOrDefault();
             IntPtr hierarchyPtr;
-            NativeMethods.frc_findContours_Hierarchy(input.CvPtr, contours.NativeVector.CvPtr, out hierarchyPtr, (int)mode, (int)method, offset0);
+            NativeMethods.frc_findContours_Hierarchy(input.CvPtr, contours.NativeVector.CvPtr, out hierarchyPtr,
+                (int) mode, (int) method, offset0);
             hierarchy.Clear();
             unsafe
             {
@@ -134,7 +138,8 @@ namespace OpenCvSharp.FRC
         /// otherwise it will be oriented counter-clockwise. Here, the usual screen coordinate 
         /// system is assumed - the origin is at the top-left corner, x axis is oriented to the right, 
         /// and y axis is oriented downwards.</param>
-        public static void FindContoursConvexHull(InputOutputArray input, ListOfPointArray contours, ListOfPointArray hulls, RetrievalModes mode,
+        public static void FindContoursConvexHull(InputOutputArray input, ListOfPointArray contours,
+            ListOfPointArray hulls, RetrievalModes mode,
             ContourApproximationModes method, bool clockwise = false, Point? offset = null)
         {
 
@@ -185,15 +190,115 @@ namespace OpenCvSharp.FRC
             if (hierarchy == null)
             {
                 NativeMethods.frc_drawContours(image.CvPtr, contours.NativeVectorDraw.CvPtr,
-                    contourIdx, color, thickness, (int)lineType, null, 0, maxLevel, offset0);
+                    contourIdx, color, thickness, (int) lineType, null, 0, maxLevel, offset0);
             }
             else
             {
                 Vec4i[] hiearchyVecs = EnumerableEx.SelectToArray(hierarchy, hi => hi.ToVec4i());
                 NativeMethods.frc_drawContours(image.CvPtr, contours.NativeVectorDraw.CvPtr,
-                    contourIdx, color, thickness, (int)lineType, hiearchyVecs, hiearchyVecs.Length, maxLevel, offset0);
+                    contourIdx, color, thickness, (int) lineType, hiearchyVecs, hiearchyVecs.Length, maxLevel, offset0);
             }
         }
 
+        public enum BlurType
+        {
+            Box,
+            Gaussian,
+            Median,
+            Bilateral
+        }
+
+        public static void Blur(InputArray input, OutputArray output, BlurType type, double radius)
+        {
+            int iradius = (int) (radius + 0.5);
+            int kernelSize;
+            switch (type)
+            {
+                case BlurType.Box:
+                    kernelSize = 2*iradius + 1;
+                    Cv2.Blur(input, output, new Size(kernelSize, kernelSize));
+                    break;
+                case BlurType.Gaussian:
+                    kernelSize = 6*iradius + 1;
+                    Cv2.GaussianBlur(input, output, new Size(kernelSize, kernelSize), radius);
+                    break;
+                case BlurType.Median:
+                    kernelSize = 2*iradius + 1;
+                    Cv2.MedianBlur(input, output, kernelSize);
+                    break;
+                case BlurType.Bilateral:
+                    Cv2.BilateralFilter(input, output, -1, radius, radius);
+                    break;
+            }
+        }
+
+        public static void Canny(InputArray input, OutputArray output, double threshold1, double threshold2,
+            int apertureSize = 3, bool gradient = false)
+        {
+            Cv2.Canny(input, output, threshold1, threshold2, apertureSize, gradient);
+        }
+
+        public static void Laplacian(InputArray input, OutputArray output, MatType ddepth, int ksize = 1,
+            double scale = 1, double delta = 0, BorderTypes borderType = BorderTypes.Reflect101)
+        {
+            Cv2.Laplacian(input, output, ddepth, ksize, scale, delta, borderType);
+        }
+
+        public static void RunCascadeClassifier(Mat input, CascadeClassifier classifier,
+            ListOfRect detections, double scaleFactor = 1.1,
+            int minNeighbors = 3,
+            HaarDetectionType flags = 0,
+            Size? minSize = null,
+            Size? maxSize = null)
+        {
+            if (classifier == null)
+                throw new ArgumentNullException(nameof(classifier));
+            if (input == null)
+                throw new ArgumentNullException(nameof(input));
+            if (detections == null)
+                throw new ArgumentNullException(nameof(detections));
+
+            classifier.ThrowIfDisposed();
+            input.ThrowIfDisposed();
+
+            Size minSize0 = minSize.GetValueOrDefault(new Size());
+            Size maxSize0 = maxSize.GetValueOrDefault(new Size());
+
+            NativeMethods.objdetect_CascadeClassifier_detectMultiScale1(classifier.CvPtr, input.CvPtr, detections.NativeVector.CvPtr,
+                scaleFactor, minNeighbors, (int)flags, minSize0, maxSize0);
+
+
+        }
+
+        public static void Desaturate(Mat input, Mat output)
+        {
+            switch (input.Channels())
+            {
+                case 1:
+                    input.CopyTo(output);
+                    break;
+                case 3:
+                    CvtColor(input, output, ColorConversionCodes.BGR2GRAY);
+                    break;
+                case 4:
+                    CvtColor(input, output, ColorConversionCodes.BGRA2GRAY);
+                    break;
+                default:
+                    throw new InvalidOperationException("Input to desaturate must have 1, 3 or 4 channels");
+            }
+        }
+
+        public static void DistanceTransform(InputArray input, Mat output,
+                                             DistanceTypes distanceType,
+                                             DistanceMaskSize maskSize)
+        {
+            Cv2.DistanceTransform(input, output, distanceType, maskSize);
+            output.ConvertTo(output, -1);
+        }
+
+        public static void FindBlobs(Mat input, Mat output, double minArea, IList<double> circularity)
+        {
+            FeatureDet
+        }
     }
 }
