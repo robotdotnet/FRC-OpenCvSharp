@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Linq;
 using OpenCvSharp.Util;
 
 namespace OpenCvSharp
@@ -616,7 +617,7 @@ namespace OpenCvSharp
 #endif
         public static MatOfFloat6 FromArray(IEnumerable<Vec6f> enumerable)
         {
-            return FromArray(EnumerableEx.ToArray(enumerable));
+            return FromArray(enumerable.ToArray());
         }
         #endregion
 

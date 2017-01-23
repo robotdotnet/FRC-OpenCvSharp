@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Linq;
 using System.Reflection;
 using OpenCvSharp.Util;
 
@@ -365,17 +366,14 @@ namespace OpenCvSharp
                 throw new ArgumentNullException(nameof(sizes));
             if (data == IntPtr.Zero)
                 throw new ArgumentNullException(nameof(data));
-            int[] sizesArray = EnumerableEx.ToArray(sizes);
+            int[] sizesArray = sizes.ToArray();
             if (steps == null)
             {
                 ptr = NativeMethods.core_Mat_new92(sizesArray.Length, sizesArray, type, data, IntPtr.Zero);
             }
             else
             {
-                IntPtr[] stepsArray = EnumerableEx.SelectToArray(steps, delegate(long s)
-                {
-                    return new IntPtr(s);
-                });
+                IntPtr[] stepsArray = steps.Select(s => new IntPtr(s)).ToArray();
                 ptr = NativeMethods.core_Mat_new9(sizesArray.Length, sizesArray, type, data, stepsArray);
             }
         }
@@ -417,7 +415,7 @@ namespace OpenCvSharp
                 throw new ArgumentNullException(nameof(data));
 
             GCHandle handle = AllocGCHandle(data);
-            int[] sizesArray = EnumerableEx.ToArray(sizes);
+            int[] sizesArray = sizes.ToArray();
             if (steps == null)
             {
                 ptr = NativeMethods.core_Mat_new92(sizesArray.Length, sizesArray,
@@ -425,10 +423,7 @@ namespace OpenCvSharp
             }
             else
             {
-                IntPtr[] stepsArray = EnumerableEx.SelectToArray(steps, delegate(long s)
-                {
-                    return new IntPtr(s);
-                });
+                IntPtr[] stepsArray = steps.Select(s => new IntPtr(s)).ToArray();
                 ptr = NativeMethods.core_Mat_new9(sizesArray.Length, sizesArray,
                     type, handle.AddrOfPinnedObject(), stepsArray);
             }
@@ -454,7 +449,7 @@ namespace OpenCvSharp
             if (sizes == null)
                 throw new ArgumentNullException(nameof(sizes));
 
-            int[] sizesArray = EnumerableEx.ToArray(sizes);
+            int[] sizesArray = sizes.ToArray();
             ptr = NativeMethods.core_Mat_new10(sizesArray.Length, sizesArray, type);
         }
 
@@ -481,7 +476,7 @@ namespace OpenCvSharp
         {
             if (sizes == null)
                 throw new ArgumentNullException(nameof(sizes));
-            int[] sizesArray = EnumerableEx.ToArray(sizes);
+            int[] sizesArray = sizes.ToArray();
             ptr = NativeMethods.core_Mat_new11(sizesArray.Length, sizesArray, type, s);
         }
 
@@ -3234,14 +3229,12 @@ namespace OpenCvSharp
             /*
             if (ranges == null)
                 throw new ArgumentNullException();
-
             ThrowIfDisposed();
             CvSlice[] slices = new CvSlice[ranges.Length];
             for (int i = 0; i < ranges.Length; i++)
             {
                 slices[i] = ranges[i];
             }
-
             IntPtr retPtr = NativeMethods.core_Mat_subMat1(ptr, ranges.Length, ranges);
             Mat retVal = new Mat(retPtr);
             return retVal;*/
@@ -3270,10 +3263,7 @@ namespace OpenCvSharp
 
             if (acceptableTypes != null && acceptableTypes.Length > 0)
             {
-                bool isValidDepth = EnumerableEx.Any(acceptableTypes, delegate(MatType type)
-                {
-                    return type == t;
-                });
+                bool isValidDepth = acceptableTypes.Any(type => type == t);
                 if (!isValidDepth)
                     throw new OpenCvSharpException("Mat data type is not compatible: " + t);
             }
@@ -3298,10 +3288,7 @@ namespace OpenCvSharp
 
             if (acceptableTypes != null && acceptableTypes.Length > 0)
             {
-                bool isValidDepth = EnumerableEx.Any(acceptableTypes, delegate(MatType type)
-                {
-                    return type == t;
-                });
+                bool isValidDepth = acceptableTypes.Any(type => type == t);
                 if (!isValidDepth)
                     throw new OpenCvSharpException("Mat data type is not compatible: " + t);
             }
@@ -4244,10 +4231,7 @@ namespace OpenCvSharp
         public void SetArray(int row, int col, params DMatch[] data)
         {
             CheckArgumentsForConvert(row, col, data);
-            Vec4f[] dataV = EnumerableEx.SelectToArray(data, delegate(DMatch d)
-            {
-                return (Vec4f) d;
-            });
+            Vec4f[] dataV = data.Select(d => (Vec4f)d).ToArray();
             NativeMethods.core_Mat_nSetVec4f(ptr, row, col, dataV, dataV.Length);
         }
 
@@ -4260,10 +4244,7 @@ namespace OpenCvSharp
         public void SetArray(int row, int col, DMatch[,] data)
         {
             CheckArgumentsForConvert(row, col, data);
-            Vec4f[] dataV = EnumerableEx.SelectToArray(data, delegate(DMatch d)
-            {
-                return (Vec4f) d;
-            });
+            Vec4f[] dataV = data.SelectMatrix(d => (Vec4f)d);
             NativeMethods.core_Mat_nSetVec4f(ptr, row, col, dataV, dataV.Length);
         }
 

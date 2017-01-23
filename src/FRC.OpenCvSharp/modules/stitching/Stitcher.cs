@@ -280,7 +280,7 @@ namespace OpenCvSharp
             if (images == null)
                 throw new ArgumentNullException(nameof(images));
 
-            IntPtr[] imagesPtrs = EnumerableEx.SelectPtrs(images);
+            IntPtr[] imagesPtrs = images.SelectPtrs();
 
             int status = NativeMethods.stitching_Stitcher_estimateTransform_MatArray1(
                 ptr, imagesPtrs, imagesPtrs.Length);
@@ -294,7 +294,7 @@ namespace OpenCvSharp
             if (rois == null)
                 throw new ArgumentNullException(nameof(rois));
 
-            IntPtr[] imagesPtrs = EnumerableEx.SelectPtrs(images);
+            IntPtr[] imagesPtrs = images.SelectPtrs();
 
             using (var roisPointer = new ArrayAddress2<Rect>(rois))
             {
@@ -340,7 +340,7 @@ namespace OpenCvSharp
                 throw new ArgumentNullException(nameof(pano));
             pano.ThrowIfNotReady();
 
-            IntPtr[] imagesPtrs = EnumerableEx.SelectPtrs(images);
+            IntPtr[] imagesPtrs = images.SelectPtrs();
             int status = NativeMethods.stitching_Stitcher_composePanorama2_MatArray(
                 ptr, imagesPtrs, imagesPtrs.Length, pano.CvPtr);
             pano.Fix();
@@ -384,7 +384,7 @@ namespace OpenCvSharp
                 throw new ArgumentNullException(nameof(pano));
             pano.ThrowIfNotReady();
 
-            IntPtr[] imagesPtrs = EnumerableEx.SelectPtrs(images);
+            IntPtr[] imagesPtrs = images.SelectPtrs();
 
             Status status = (Status)NativeMethods.stitching_Stitcher_stitch1_MatArray(
                 ptr, imagesPtrs, imagesPtrs.Length, pano.CvPtr);
@@ -440,7 +440,7 @@ namespace OpenCvSharp
                 throw new ArgumentNullException(nameof(pano));
             pano.ThrowIfNotReady();
 
-            IntPtr[] imagesPtrs = EnumerableEx.SelectPtrs(images);
+            IntPtr[] imagesPtrs = images.SelectPtrs();
 
             using (var roisPointer = new ArrayAddress2<Rect>(rois))
             {

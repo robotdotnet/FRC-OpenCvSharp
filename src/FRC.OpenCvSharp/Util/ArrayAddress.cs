@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Linq;
 
 #pragma warning disable 1591
 // ReSharper disable InconsistentNaming
@@ -35,7 +36,7 @@ namespace OpenCvSharp.Util
         /// </summary>
         /// <param name="enumerable"></param>
         public ArrayAddress1(IEnumerable<T> enumerable)
-            : this(EnumerableEx.ToArray(enumerable))
+            : this(enumerable.ToArray())
         {
             original = enumerable;
         }

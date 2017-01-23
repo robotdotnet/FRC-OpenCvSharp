@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Linq;
 using OpenCvSharp.Util;
 
 namespace OpenCvSharp
@@ -67,7 +68,7 @@ namespace OpenCvSharp
             if (sizes == null)
                 throw new ArgumentNullException(nameof(sizes));
 
-            int[] sizesArray = EnumerableEx.ToArray(sizes);
+            int[] sizesArray = sizes.ToArray();
             ptr = NativeMethods.core_SparseMat_new2(sizesArray.Length, sizesArray, type);
         }
 

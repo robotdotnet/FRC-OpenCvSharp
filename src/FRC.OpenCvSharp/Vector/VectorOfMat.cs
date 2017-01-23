@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using OpenCvSharp.Util;
 
@@ -53,7 +53,7 @@ namespace OpenCvSharp
             if (mats == null)
                 throw new ArgumentNullException(nameof(mats));
 
-            var matPointers = EnumerableEx.SelectPtrs(mats);
+            var matPointers = mats.SelectPtrs();
             using (var matPointersPointer = new ArrayAddress1<IntPtr>(matPointers))
             {
                 ptr = NativeMethods.vector_Mat_new3(

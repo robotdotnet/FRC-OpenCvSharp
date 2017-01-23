@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Linq;
 using OpenCvSharp.Util;
 using OpenCvSharp.ML;
 
@@ -54,7 +55,7 @@ namespace OpenCvSharp
         {
             if (data == null)
                 throw new ArgumentNullException(nameof(data));
-            DTrees.Split[] array = EnumerableEx.ToArray(data);
+            DTrees.Split[] array = data.ToArray();
             ptr = NativeMethods.vector_DTrees_Split_new3(array, new IntPtr(array.Length));
         }
 

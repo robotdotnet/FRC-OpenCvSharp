@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using OpenCvSharp.Util;
 
 namespace OpenCvSharp
@@ -277,7 +278,7 @@ namespace OpenCvSharp
             }
             else
             {
-                int[] idxArray = EnumerableEx.ToArray(idx);
+                int[] idxArray = idx.ToArray();
                 NativeMethods.imgproc_Subdiv2D_getVoronoiFacetList(ptr, idxArray, idxArray.Length, out facetListPtr, out facetCentersPtr);
             }
 

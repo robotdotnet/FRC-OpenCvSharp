@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using OpenCvSharp.Util;
 
 namespace OpenCvSharp.FRC
@@ -189,7 +190,7 @@ namespace OpenCvSharp.FRC
             }
             else
             {
-                Vec4i[] hiearchyVecs = EnumerableEx.SelectToArray(hierarchy, hi => hi.ToVec4i());
+                Vec4i[] hiearchyVecs = hierarchy.Select(hi => hi.ToVec4i()).ToArray();
                 NativeMethods.frc_drawContours(image.CvPtr, contours.NativeVectorDraw.CvPtr,
                     contourIdx, color, thickness, (int)lineType, hiearchyVecs, hiearchyVecs.Length, maxLevel, offset0);
             }
