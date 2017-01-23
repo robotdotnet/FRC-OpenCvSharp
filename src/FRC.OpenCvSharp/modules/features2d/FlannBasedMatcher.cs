@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using OpenCvSharp.Flann;
 using OpenCvSharp.Util;
 
@@ -134,11 +135,11 @@ namespace OpenCvSharp
             if (descriptors == null)
                 throw new ArgumentNullException(nameof(descriptors));
 
-            Mat[] descriptorsArray = EnumerableEx.ToArray(descriptors);
+            Mat[] descriptorsArray = descriptors.ToArray();
             if (descriptorsArray.Length == 0)
                 return;
 
-            IntPtr[] descriptorsPtrs = EnumerableEx.SelectPtrs(descriptorsArray);
+            IntPtr[] descriptorsPtrs = descriptorsArray.SelectPtrs();
             NativeMethods.features2d_DescriptorMatcher_add(ptr, descriptorsPtrs, descriptorsPtrs.Length);
         }
 

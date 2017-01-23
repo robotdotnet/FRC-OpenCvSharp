@@ -148,7 +148,7 @@ namespace OpenCvSharp.Face
             if (labels == null)
                 throw new ArgumentNullException(nameof(labels));
             IntPtr[] srcArray = EnumerableEx.SelectPtrs(src);
-            int[] labelsArray = EnumerableEx.ToArray(labels);
+            int[] labelsArray = $.ToArray();
             NativeMethods.face_FaceRecognizer_train(
                 ptr, srcArray, srcArray.Length, labelsArray, labelsArray.Length);
         }
@@ -165,7 +165,7 @@ namespace OpenCvSharp.Face
             if (labels == null)
                 throw new ArgumentNullException(nameof(labels));
             IntPtr[] srcArray = EnumerableEx.SelectPtrs(src);
-            int[] labelsArray = EnumerableEx.ToArray(labels);
+            int[] labelsArray = $.ToArray();
             NativeMethods.face_FaceRecognizer_update(
                 ptr, srcArray, srcArray.Length, labelsArray, labelsArray.Length);
         }

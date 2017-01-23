@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Linq;
 using OpenCvSharp.Util;
 
 namespace OpenCvSharp
@@ -52,7 +53,7 @@ namespace OpenCvSharp
         {
             if (data == null)
                 throw new ArgumentNullException(nameof(data));
-            int[] array = EnumerableEx.ToArray(data);
+            int[] array = data.ToArray();
             ptr = NativeMethods.vector_int32_new3(array, new IntPtr(array.Length));
         }
 

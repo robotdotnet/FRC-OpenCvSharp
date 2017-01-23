@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using OpenCvSharp.Util;
 
 namespace OpenCvSharp
@@ -616,7 +617,7 @@ namespace OpenCvSharp
 #endif
         public static MatOfPoint2d FromArray(IEnumerable<Point2d> enumerable)
         {
-            return FromArray(EnumerableEx.ToArray(enumerable));
+            return FromArray(enumerable.ToArray());
         }
 
         #endregion

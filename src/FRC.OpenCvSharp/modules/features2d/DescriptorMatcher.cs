@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 using OpenCvSharp.Util;
 
 namespace OpenCvSharp
@@ -171,11 +172,11 @@ namespace OpenCvSharp
             if (descriptors == null)
                 throw new ArgumentNullException(nameof(descriptors));
 
-            Mat[] descriptorsArray = EnumerableEx.ToArray(descriptors);
+            Mat[] descriptorsArray = descriptors.ToArray();
             if (descriptorsArray.Length == 0)
                 return;
 
-            IntPtr[] descriptorsPtrs = EnumerableEx.SelectPtrs(descriptorsArray);
+            IntPtr[] descriptorsPtrs = descriptorsArray.SelectPtrs();
             NativeMethods.features2d_DescriptorMatcher_add(ptr, descriptorsPtrs, descriptorsPtrs.Length);
         }
 
@@ -334,7 +335,7 @@ namespace OpenCvSharp
             var masksPtrs = new IntPtr[0];
             if (masks != null)
             {
-                masksPtrs = EnumerableEx.SelectPtrs(masks);
+                masksPtrs = masks.SelectPtrs();
             }
 
             using (var matchesVec = new VectorOfDMatch())
@@ -365,7 +366,7 @@ namespace OpenCvSharp
             var masksPtrs = new IntPtr[0];
             if (masks != null)
             {
-                masksPtrs = EnumerableEx.SelectPtrs(masks);
+                masksPtrs = masks.SelectPtrs();
             }
 
             using (var matchesVec = new VectorOfVectorDMatch())
@@ -395,7 +396,7 @@ namespace OpenCvSharp
             var masksPtrs = new IntPtr[0];
             if (masks != null)
             {
-                masksPtrs = EnumerableEx.SelectPtrs(masks);
+                masksPtrs = masks.SelectPtrs();
             }
 
             using (var matchesVec = new VectorOfVectorDMatch())

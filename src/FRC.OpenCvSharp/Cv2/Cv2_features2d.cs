@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using OpenCvSharp.Util;
+using System.Linq;
 
 // ReSharper disable InconsistentNaming
 
@@ -100,7 +101,7 @@ namespace OpenCvSharp
             image.ThrowIfDisposed();
             outImage.ThrowIfDisposed();
 
-            KeyPoint[] keypointsArray = EnumerableEx.ToArray(keypoints);
+            KeyPoint[] keypointsArray = keypoints.ToArray();
             Scalar color0 = color.GetValueOrDefault(Scalar.All(-1));
             NativeMethods.features2d_drawKeypoints(image.CvPtr, keypointsArray, keypointsArray.Length,
                 outImage.CvPtr, color0, (int)flags);
@@ -141,9 +142,9 @@ namespace OpenCvSharp
             img2.ThrowIfDisposed();
             outImg.ThrowIfDisposed();
 
-            KeyPoint[] keypoints1Array = EnumerableEx.ToArray(keypoints1);
-            KeyPoint[] keypoints2Array = EnumerableEx.ToArray(keypoints2);
-            DMatch[] matches1To2Array = EnumerableEx.ToArray(matches1To2);
+            KeyPoint[] keypoints1Array = keypoints1.ToArray();
+            KeyPoint[] keypoints2Array = keypoints2.ToArray();
+            DMatch[] matches1To2Array = matches1To2.ToArray();
             Scalar matchColor0 = matchColor.GetValueOrDefault(Scalar.All(-1));
             Scalar singlePointColor0 = singlePointColor.GetValueOrDefault(Scalar.All(-1));
 
@@ -151,7 +152,7 @@ namespace OpenCvSharp
             int matchesMaskLength = 0;
             if (matchesMask != null)
             {
-                matchesMaskArray = EnumerableEx.ToArray(matchesMask);
+                matchesMaskArray = matchesMask.ToArray();
                 matchesMaskLength = matchesMaskArray.Length;
             }
 
@@ -197,11 +198,11 @@ namespace OpenCvSharp
             img2.ThrowIfDisposed();
             outImg.ThrowIfDisposed();
 
-            KeyPoint[] keypoints1Array = EnumerableEx.ToArray(keypoints1);
-            KeyPoint[] keypoints2Array = EnumerableEx.ToArray(keypoints2);
-            DMatch[][] matches1To2Array = EnumerableEx.SelectToArray(matches1To2, EnumerableEx.ToArray);
+            KeyPoint[] keypoints1Array = keypoints1.ToArray();
+            KeyPoint[] keypoints2Array = keypoints2.ToArray();
+            DMatch[][] matches1To2Array = matches1To2.SelectArrayArrayReadOnly();
             int matches1To2Size1 = matches1To2Array.Length;
-            int[] matches1To2Size2 = EnumerableEx.SelectToArray(matches1To2Array, dm => dm.Length);
+            int[] matches1To2Size2 = matches1To2Array.Select(dm => dm.Length).ToArray();
             Scalar matchColor0 = matchColor.GetValueOrDefault(Scalar.All(-1));
             Scalar singlePointColor0 = singlePointColor.GetValueOrDefault(Scalar.All(-1));
 
@@ -217,9 +218,9 @@ namespace OpenCvSharp
                 }
                 else
                 {
-                    byte[][] matchesMaskArray = EnumerableEx.SelectToArray(matchesMask, EnumerableEx.ToArray);
+                    byte[][] matchesMaskArray = matchesMask.SelectArrayArrayReadOnly();
                     int matchesMaskSize1 = matches1To2Array.Length;
-                    int[] matchesMaskSize2 = EnumerableEx.SelectToArray(matchesMaskArray, dm => dm.Length);
+                    int[] matchesMaskSize2 = matchesMaskArray.Select(dm => dm.Length).ToArray();
                     using (var matchesMaskPtr = new ArrayAddress2<byte>(matchesMaskArray))
                     {
                         NativeMethods.features2d_drawMatches2(img1.CvPtr, keypoints1Array, keypoints1Array.Length,
@@ -308,7 +309,7 @@ namespace OpenCvSharp
             if (recallPrecisionCurve == null)
                 throw new ArgumentNullException(nameof(recallPrecisionCurve));
 
-            var array = EnumerableEx.ToArray(recallPrecisionCurve);
+            var array = recallPrecisionCurve.ToArray();
             return NativeMethods.features2d_getRecall(array, array.Length, lPrecision);
         }
 
@@ -323,7 +324,7 @@ namespace OpenCvSharp
         {
             if (recallPrecisionCurve == null)
                 throw new ArgumentNullException(nameof(recallPrecisionCurve));
-            var array = EnumerableEx.ToArray(recallPrecisionCurve);
+            var array = recallPrecisionCurve.ToArray();
             return NativeMethods.features2d_getNearestPoint(array, array.Length, lPrecision);
         }
     }

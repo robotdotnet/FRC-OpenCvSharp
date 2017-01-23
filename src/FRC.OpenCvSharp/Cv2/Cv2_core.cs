@@ -2212,7 +2212,7 @@ namespace OpenCvSharp
                 throw new ArgumentNullException(nameof(mean));
             covar.ThrowIfDisposed();
             mean.ThrowIfDisposed();
-            IntPtr[] samplesPtr = EnumerableEx.SelectPtrs(samples);
+            IntPtr[] samplesPtr = samples.SelectPtrs();
             NativeMethods.core_calcCovarMatrix_Mat(samplesPtr, samples.Length, covar.CvPtr, mean.CvPtr, (int)flags, ctype);
             GC.KeepAlive(samples);
             GC.KeepAlive(covar);

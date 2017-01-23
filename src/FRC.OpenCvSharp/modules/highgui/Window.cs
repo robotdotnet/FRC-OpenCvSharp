@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Linq;
 using OpenCvSharp.Util;
 
 namespace OpenCvSharp
@@ -764,8 +765,8 @@ namespace OpenCvSharp
             if (names == null)
                 throw new ArgumentNullException(nameof(names));
 
-            Mat[] imagesArray = EnumerableEx.ToArray(images);
-            string[] namesArray = EnumerableEx.ToArray(names);
+            Mat[] imagesArray = images.ToArray();
+            string[] namesArray = names.ToArray();
 
             if (imagesArray.Length == 0)
                 return;
