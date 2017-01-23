@@ -36,7 +36,7 @@
     ]
   },
   "frameworks": {
-    "net45": {},
+    "net35": {},
     "netstandard1.1": {
       "buildOptions": {
         "define": [ "NETSTANDARD" ]

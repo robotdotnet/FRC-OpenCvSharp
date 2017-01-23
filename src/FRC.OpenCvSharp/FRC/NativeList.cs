@@ -34,7 +34,10 @@ namespace OpenCvSharp.FRC
     [DebuggerDisplay("Count = {Count}")]
     [Serializable]
 #endif
-    internal class NativeList<T> : IList<T>, System.Collections.IList, IReadOnlyList<T>
+    internal class NativeList<T> : IList<T>, System.Collections.IList 
+    #if !NET35
+        , IReadOnlyList<T>
+    #endif
     {
         private const int _defaultCapacity = 4;
 

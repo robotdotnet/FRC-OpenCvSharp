@@ -31,6 +31,11 @@
     "nowarn": [ "CS0649" ]
   },
   "frameworks": {
+    "net35": {
+      "buildOptions": {
+        "define": [ "NET35" ]
+      }
+    },
     "net45": {
     },
     "netstandard1.5": {
@@ -55,7 +60,7 @@
     }
   },
   "dependencies": {
-    "NativeLibraryUtilities": "1.0.0"
+    "NativeLibraryUtilities": "1.0.3"
   },
   "configurations": {
     "Debug": {

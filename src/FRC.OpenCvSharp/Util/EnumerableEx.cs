@@ -82,6 +82,22 @@ namespace OpenCvSharp.Util
             });
         }
 
+         /// <summary>
+        /// Enumerable.Select -> ToArray
+        /// </summary>
+        /// <param name="enumerable"></param>
+        /// <returns></returns>
+        public static IntPtr[] SelectPtrs(IEnumerable<MatOfPoint> enumerable)
+        {
+            return SelectToArray(enumerable, delegate(Mat obj)
+            {
+                if (obj == null)
+                    throw new ArgumentException("enumerable contains null");
+                obj.ThrowIfDisposed();
+                return obj.CvPtr;
+            });
+        }
+
         /// <summary>
         /// Enumerable.Select -> ToArray
         /// </summary>

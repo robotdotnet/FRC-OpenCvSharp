@@ -11,7 +11,10 @@ namespace OpenCvSharp.FRC
     /// <remarks>
     /// This class should be stored outside your main loop, and created only once. Reuse this for every image created
     /// </remarks>
-    public class ListOfPointArray : IList<Point[]>, IReadOnlyList<Point[]>, IDisposable
+    public class ListOfPointArray : IList<Point[]>, IDisposable
+    #if !NET35
+        , IReadOnlyList<Point[]>
+    #endif
     {
         private List<Point[]> _points;
         private NativeList<IntPtr> _sizes;
