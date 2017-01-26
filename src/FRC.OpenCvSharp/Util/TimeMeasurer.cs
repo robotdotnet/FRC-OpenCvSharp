@@ -4,11 +4,6 @@ using System.Diagnostics;
 namespace OpenCvSharp.Util
 {
     /// <summary>
-    /// Substitute of System.Action
-    /// </summary>
-    public delegate void Action();
-
-    /// <summary>
     /// 
     /// </summary>
     public static class TimeMeasurer
