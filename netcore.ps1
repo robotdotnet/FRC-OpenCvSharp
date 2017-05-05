@@ -83,7 +83,7 @@ echo $version
 echo $type
 echo $buildNumber
 
-$revision = + $type + $buildNumber
+$revision = "" + $type + $buildNumber
 
 If ($debug) {
  $configuration = "-c=Debug"
