@@ -1,32 +1,46 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26114.2
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{DB3E1B73-3837-468A-B67F-0640EE5FFA9B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{71189D4D-3A18-4404-858D-4FF56BD8AA1A}"
-	ProjectSection(SolutionItems) = preProject
-		global.json = global.json
-	EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FRC.OpenCvSharp", "src\FRC.OpenCvSharp\FRC.OpenCvSharp.csproj", "{132E6AEA-F5FC-4991-9DA1-6F2DD41AF500}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "FRC.OpenCvSharp", "src\FRC.OpenCvSharp\FRC.OpenCvSharp.xproj", "{132E6AEA-F5FC-4991-9DA1-6F2DD41AF500}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FRC.OpenCvSharp.DesktopLibraries", "src\FRC.OpenCvSharp.DesktopLibraries\FRC.OpenCvSharp.DesktopLibraries.csproj", "{D94923C1-166C-4FCB-B1DE-AE2F969E7F8C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{132E6AEA-F5FC-4991-9DA1-6F2DD41AF500}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{132E6AEA-F5FC-4991-9DA1-6F2DD41AF500}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{132E6AEA-F5FC-4991-9DA1-6F2DD41AF500}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{132E6AEA-F5FC-4991-9DA1-6F2DD41AF500}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D94923C1-166C-4FCB-B1DE-AE2F969E7F8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D94923C1-166C-4FCB-B1DE-AE2F969E7F8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D94923C1-166C-4FCB-B1DE-AE2F969E7F8C}.Debug|x64.ActiveCfg = Debug|x64
+		{D94923C1-166C-4FCB-B1DE-AE2F969E7F8C}.Debug|x64.Build.0 = Debug|x64
+		{D94923C1-166C-4FCB-B1DE-AE2F969E7F8C}.Debug|x86.ActiveCfg = Debug|x86
+		{D94923C1-166C-4FCB-B1DE-AE2F969E7F8C}.Debug|x86.Build.0 = Debug|x86
+		{D94923C1-166C-4FCB-B1DE-AE2F969E7F8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D94923C1-166C-4FCB-B1DE-AE2F969E7F8C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D94923C1-166C-4FCB-B1DE-AE2F969E7F8C}.Release|x64.ActiveCfg = Release|x64
+		{D94923C1-166C-4FCB-B1DE-AE2F969E7F8C}.Release|x64.Build.0 = Release|x64
+		{D94923C1-166C-4FCB-B1DE-AE2F969E7F8C}.Release|x86.ActiveCfg = Release|x86
+		{D94923C1-166C-4FCB-B1DE-AE2F969E7F8C}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{132E6AEA-F5FC-4991-9DA1-6F2DD41AF500} = {DB3E1B73-3837-468A-B67F-0640EE5FFA9B}
+		{D94923C1-166C-4FCB-B1DE-AE2F969E7F8C} = {DB3E1B73-3837-468A-B67F-0640EE5FFA9B}
 	EndGlobalSection
 EndGlobal

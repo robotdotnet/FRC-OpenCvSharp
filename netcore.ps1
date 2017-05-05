@@ -83,7 +83,7 @@ echo $version
 echo $type
 echo $buildNumber
 
-$revision = "--version-suffix=" + $type + $buildNumber
+$revision = + $type + $buildNumber
 
 If ($debug) {
  $configuration = "-c=Debug"
@@ -118,17 +118,17 @@ function Build {
   exec { & dotnet restore }
   echo $configuration
   
-  exec { & dotnet build src\FRC.OpenCvSharp $configuration $revision }
+  exec { & dotnet build src\FRC.OpenCvSharp $configuration /p:VersionPrefix=$version /p:VersionSuffix=$revision }
 
-  exec { & dotnet build src\FRC.OpenCvSharp.DesktopLibraries $configuration $revision }
+  exec { & dotnet build src\FRC.OpenCvSharp.DesktopLibraries $configuration /p:VersionPrefix=$version /p:VersionSuffix=$revision }
 }
 
 function Pack { 
   if (Test-Path .\artifacts) { Remove-Item .\artifacts -Force -Recurse }
 
-  exec { & dotnet pack src\FRC.OpenCvSharp $configuration $revision --no-build -o .\artifacts }
+  exec { & dotnet pack src\FRC.OpenCvSharp $configuration --no-build -o .\artifacts /p:VersionPrefix=$version /p:VersionSuffix=$revision }
 
-  exec { & dotnet pack src\FRC.OpenCvSharp.DesktopLibraries $configuration $revision --no-build -o .\artifacts }
+  exec { & dotnet pack src\FRC.OpenCvSharp.DesktopLibraries $configuration --no-build -o .\artifacts /p:VersionPrefix=$version /p:VersionSuffix=$revision }
 
   # Removing the OpenCv desktop symbols package since it's too big to upload
   Remove-Item .\artifacts\FRC.OpenCvSharp.DesktopLibraries.*.symbols.nupkg
@@ -138,22 +138,6 @@ function Pack {
   }
 }
 
- if ((Test-Path .\buildTemp) -eq $false) {
-  md .\buildTemp
- }
-
-# Remove beta defintion from project.json files
-Copy-Item src\FRC.OpenCvSharp\project.json buildTemp\FRC.OpenCvSharp.projectjson
-Copy-Item src\FRC.OpenCvSharp.DesktopLibraries\project.json buildTemp\FRC.OpenCvSharp.DesktopLibraries.projectjson
-
-$netTablesJson = Get-Content 'src\FRC.OpenCvSharp\project.json' -raw | ConvertFrom-Json
-$netTablesJson.version = $version + "-*"
-$netTablesJson | ConvertTo-Json -Depth 5 | Set-Content 'src\FRC.OpenCvSharp\project.json'
-
-$netTablesJson = Get-Content 'src\FRC.OpenCvSharp.DesktopLibraries\project.json' -raw | ConvertFrom-Json
-$netTablesJson.version = $version  + "-*"
-$netTablesJson | ConvertTo-Json -Depth 5 | Set-Content 'src\FRC.OpenCvSharp.DesktopLibraries\project.json'
-
 if ($build) {
  Build
 }
@@ -161,10 +145,3 @@ if ($build) {
 if ($pack) {
  Pack
 }
-
-# Add beta definition back into project.json
-Copy-Item buildTemp\FRC.OpenCvSharp.projectjson src\FRC.OpenCvSharp\project.json
-Copy-Item buildTemp\FRC.OpenCvSharp.DesktopLibraries.projectjson src\FRC.OpenCvSharp.DesktopLibraries\project.json
-
-Remove-Item buildTemp\FRC.OpenCvSharp.projectjson
-Remove-Item buildTemp\FRC.OpenCvSharp.DesktopLibraries.projectjson

@@ -1,0 +1,53 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>OpenCvSharp libraries built for FRC</Description>
+    <Copyright>Copyright 2016 RobotDotNet, shimat</Copyright>
+    <AssemblyTitle>FRC OpenCvSharp</AssemblyTitle>
+    <VersionPrefix>0.9.3</VersionPrefix>
+    <VersionSuffix>local</VersionSuffix>
+    <Authors>RobotDotNet</Authors>
+    <TargetFrameworks>net35;net45;netstandard1.5</TargetFrameworks>
+    <NoWarn>$(NoWarn);CS0649</NoWarn>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <AssemblyName>FRC.OpenCvSharp</AssemblyName>
+    <PackageId>FRC.OpenCvSharp</PackageId>
+    <PackageTags>WPILib;FRC;FIRST;RoboRio</PackageTags>
+    <PackageProjectUrl>https://github.com/robotdotnet/FRC-OpenCvSharp</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/robotdotnet/FRC-OpenCvSharp/blob/master/LICENSE.txt</PackageLicenseUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>git://github.com/robotdotnet/FRC-OpenCvSharp</RepositoryUrl>
+    <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
+    <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
+    <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
+    <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NativeLibraryUtilities" Version="1.0.3" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net35' ">
+    <Reference Include="System" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
+    <Reference Include="System" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net35' ">
+    <DefineConstants>$(DefineConstants);NET35</DefineConstants>
+    <!-- Workaround to allow .NET 3.5 to properly build. -->
+    <FrameworkPathOverride>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v3.5\Profile\Client</FrameworkPathOverride>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard1.5' ">
+    <DefineConstants>$(DefineConstants);NETSTANDARD</DefineConstants>
+  </PropertyGroup>
+</Project>

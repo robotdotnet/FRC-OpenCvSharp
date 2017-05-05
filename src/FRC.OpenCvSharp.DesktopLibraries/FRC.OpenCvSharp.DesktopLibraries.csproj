@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Native desktop libraries for OpenCvSharp</Description>
+    <Copyright>Copyright 2016 RobotDotNet, shimat</Copyright>
+    <AssemblyTitle>FRC OpenCvSharp.DesktopLibraries</AssemblyTitle>
+    <VersionPrefix>0.9.3</VersionPrefix>
+    <VersionSuffix>local</VersionSuffix>
+    <Authors>RobotDotNet</Authors>
+    <TargetFrameworks>net35;netstandard1.1</TargetFrameworks>
+    <AssemblyName>FRC.OpenCvSharp.DesktopLibraries</AssemblyName>
+    <PackageId>FRC.OpenCvSharp.DesktopLibraries</PackageId>
+    <PackageTags>WPILib;FRC;FIRST;RoboRio</PackageTags>
+    <PackageProjectUrl>https://github.com/robotdotnet/FRC-OpenCvSharp</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/robotdotnet/FRC-OpenCvSharp/blob/master/LICENSE.txt</PackageLicenseUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>git://github.com/robotdotnet/FRC-OpenCvSharp</RepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Libraries\amd64\OpenCvSharpExtern.dll;Libraries\x86\OpenCvSharpExtern.dll;Libraries\amd64\libOpenCvSharpExtern.so;Libraries\x86\libOpenCvSharpExtern.so;Libraries\armhf\libOpenCvSharpExtern.so;Libraries\arm-raspbian\libOpenCvSharpExtern.so" Exclude="bin\**;obj\**;**\*.xproj;packages\**;@(EmbeddedResource)" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net35' ">
+    <Reference Include="System" />
+  </ItemGroup>
+
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net35' ">
+    <!-- Workaround to allow .NET 3.5 to properly build. -->
+    <FrameworkPathOverride>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v3.5\Profile\Client</FrameworkPathOverride>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard1.1' ">
+    <DefineConstants>$(DefineConstants);NETSTANDARD</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.1' ">
+    <PackageReference Include="System.Net.Primitives" Version="4.3.0" />
+  </ItemGroup>
+
+</Project>
