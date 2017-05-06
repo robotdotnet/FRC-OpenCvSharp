@@ -124,17 +124,17 @@ function Build {
 }
 
 function Pack { 
-  if (Test-Path .\artifacts) { Remove-Item .\artifacts -Force -Recurse }
+  if (Test-Path $pwd\artifacts) { Remove-Item $pwd\artifacts -Force -Recurse }
 
-  exec { & dotnet pack src\FRC.OpenCvSharp $configuration --no-build -o .\artifacts /p:VersionPrefix=$version /p:VersionSuffix=$revision }
+  exec { & dotnet pack src\FRC.OpenCvSharp $configuration --no-build -o $pwd\artifacts --include-source /p:VersionPrefix=$version /p:VersionSuffix=$revision }
 
-  exec { & dotnet pack src\FRC.OpenCvSharp.DesktopLibraries $configuration --no-build -o .\artifacts /p:VersionPrefix=$version /p:VersionSuffix=$revision }
+  exec { & dotnet pack src\FRC.OpenCvSharp.DesktopLibraries $configuration --no-build -o $pwd\artifacts /p:VersionPrefix=$version /p:VersionSuffix=$revision }
 
   # Removing the OpenCv desktop symbols package since it's too big to upload
-  Remove-Item .\artifacts\FRC.OpenCvSharp.DesktopLibraries.*.symbols.nupkg
+  Remove-Item $pwd\artifacts\FRC.OpenCvSharp.DesktopLibraries.*.symbols.nupkg
 
   if ($env:APPVEYOR) {
-    Get-ChildItem .\artifacts\*.nupkg | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name }
+    Get-ChildItem $pwd\artifacts\*.nupkg | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name }
   }
 }
 
