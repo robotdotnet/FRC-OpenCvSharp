@@ -25,6 +25,8 @@ task downloadCompiler(type: Download) {
     onlyIfNewer true
 }
 
+ext.compilerUnzipLocation = "${buildDir}/compiler"
+
 task unzipCompiler(type: Copy) {
     dependsOn downloadCompiler
     
