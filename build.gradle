@@ -15,6 +15,24 @@ ext.buildArm = !project.hasProperty('skipArm')
 ext.buildNative = !project.hasProperty('skipNative')
 ext.buildx86 = !project.hasProperty('skipx86')
 
+task downloadCompiler(type: Download) {
+    src 'http://first.wpi.edu/FRC/roborio/toolchains/FRC-2017-Windows-Toolchain-4.9.3.zip'
+    dest buildDir
+    overwrite false
+    onlyIfNewer true
+}
+
+task unzipCompiler(type: Copy) {
+    dependsOn downloadCompiler
+    
+    from zipTree("${buildDir}/FRC-2017-Windows-Toolchain-4.9.3.zip")
+    into compilerUnzipLocation
+}
+
+if (new File(compilerUnzipLocation).exists()) {
+    ext.toolChainPath = "${compilerUnzipLocation}/frc/bin"
+}
+
 if (hasProperty('makeDesktop')) {
     println 'Making desktop classifier jar. NOTE: This desktop version should only be used for local testing.' +
             'It will only support the current platform, and will override fetching the latest development version from' +

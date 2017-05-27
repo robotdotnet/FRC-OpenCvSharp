@@ -261,3 +261,6 @@ src/FRC.OpenCvSharp.DesktopLibraries/Libraries/temp/
 
 src/FRC.OpenCvSharp.DesktopLibraries/Libraries/amd64/OpenCvSharpExtern.dll
 src/FRC.OpenCvSharp.DesktopLibraries/Libraries/x86/OpenCvSharpExtern.dll
+!build.ps1
+!build.cake
+!build.sh
