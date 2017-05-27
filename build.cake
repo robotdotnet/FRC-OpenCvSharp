@@ -64,10 +64,10 @@ Task("GradleRestore")
         int exitCode = 0;
         if (System.IO.Path.DirectorySeparatorChar == '\\') {
             exitCode = StartProcess(current + "/gradlew.bat", "unzipCompiler");
-            exitCode = StartProcess(current + "/gradlew.bat", "build");
+            exitCode = StartProcess(current + "/gradlew.bat", "copyToNet");
         } else {
             exitCode = StartProcess(current + "\\gradlew", "unzipCompiler");
-            exitCode = StartProcess(current + "\\gradlew", "build");
+            exitCode = StartProcess(current + "\\gradlew", "copyToNet");
         }
         if (exitCode != 0) {
             throw new Exception("Failed to restore native dependencies");
