@@ -1,184 +1,65 @@
-import org.gradle.internal.os.OperatingSystem
+import edu.wpi.first.nativeutils.NativeUtils
 
-plugins {
-    id 'net.ltgt.errorprone' version '0.0.8'
-    id 'edu.wpi.first.wpilib.versioning.WPILibVersioningPlugin' version '1.6'
-    id "de.undercouch.download" version "3.2.0"
-}
-
-allprojects {
+buildscript {
     repositories {
-        mavenCentral()
+        mavenLocal()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath 'gradle.plugin.edu.wpi.first:native-utils:1.5.1'
+        classpath 'gradle.plugin.edu.wpi.first.wpilib.versioning:wpilib-version-plugin:2.0'
     }
 }
 
-import de.undercouch.gradle.tasks.download.Download
+apply plugin: 'cpp'
+apply plugin: 'edu.wpi.first.NativeUtils'
+apply plugin: 'edu.wpi.first.wpilib.versioning.WPILibVersioningPlugin'
 
 if (!hasProperty('releaseType')) {
     WPILibVersion {
-        releaseType = 'official'
+        releaseType = 'dev'
     }
 }
 
+apply from: 'config.gradle'
 
-ext.buildArm = !project.hasProperty('skipArm')
-ext.buildNative = !project.hasProperty('skipNative')
-ext.buildx86 = !project.hasProperty('skipx86')
-
-task downloadCompiler(type: Download) {
-    src 'http://first.wpi.edu/FRC/roborio/toolchains/FRC-2017-Windows-Toolchain-4.9.3.zip'
-    dest buildDir
-    overwrite false
-    onlyIfNewer true
-}
-
-ext.compilerUnzipLocation = "${buildDir}/compiler"
-
-task unzipCompiler(type: Copy) {
-    dependsOn downloadCompiler
-    
-    from zipTree("${buildDir}/FRC-2017-Windows-Toolchain-4.9.3.zip")
-    into compilerUnzipLocation
-}
-
-if (new File(compilerUnzipLocation).exists()) {
-    ext.toolChainPath = "${compilerUnzipLocation}/frc/bin"
-}
-
-if (hasProperty('makeDesktop')) {
-    println 'Making desktop classifier jar. NOTE: This desktop version should only be used for local testing.' +
-            'It will only support the current platform, and will override fetching the latest development version from' +
-            ' the maven repo until you manually delete it!'
-}
-
-ext.getPlatformPath2 = { targetPlatform ->
-    if (targetPlatform.architecture.arm) {
-        return 'Linux/arm'
-    } else if (targetPlatform.operatingSystem.linux) {
-        if (targetPlatform.architecture.amd64) {
-            return 'Linux/amd64'
-        } else {
-            return 'Linux/' + targetPlatform.architecture.name
+model {
+  dependencyConfigs {
+        opencv(DependencyConfig) {
+            groupId = 'org.opencv'
+            artifactId = 'opencv-cpp'
+            headerClassifier = 'headers'
+            ext = 'zip'
+            version = '3.2.0'
+            sharedConfigs = [ OpenCvSharpExtern: []]
         }
-    } else if (targetPlatform.operatingSystem.windows) {
-        if (targetPlatform.architecture.amd64) {
-            return 'Windows/amd64'
-        } else {
-            return 'Windows/' + targetPlatform.architecture.name
-        }
-    } else if (targetPlatform.operatingSystem.macOsX) {
-        if (targetPlatform.architecture.amd64) {
-            return 'Mac OS X/x86_64'
-        } else {
-            return 'Mac OS X/' + targetPlatform.architecture.name
-        }
-    } else {
-        return targetPlatform.operatingSystem.name + '/' + targetPlatform.architecture.name
-    }
-}
+  }
 
-ext.getPlatformPath = { binary ->
-    return getPlatformPath2(binary.targetPlatform)
-}
-
-apply from: "locations.gradle"
-
-apply from: "properties.gradle"
-
-apply from: "dependencies.gradle"
-
-ext.setupDefines = { project, binaries ->
-    binaries.all {
-	if (project.hasProperty('debug')) {
-	    project.setupDebugDefines(cppCompiler, linker)
-	} else {
-	    project.setupReleaseDefines(cppCompiler, linker)
-	}
-        tasks.withType(CppCompile) {
-            if (!project.hasProperty('compilerPrefix') && targetPlatform.architecture.name == 'arm-v7') {
-                // RoboRio, Link Nothing
-            } else {
-                // Everything else, link cscore and wpiutil
-                project.addWpiUtilStaticLibraryLinks(it, linker, targetPlatform)
-                // CsCore not currently supported
-                project.addCsCoreStaticLibraryLinks(it, linker, targetPlatform)
-            }
-            project.addOpenCvLibraryLinks(it, linker, targetPlatform)
-        }
-    }
-}
-
-apply from: "cpp.gradle"
-
-// Empty task for build so that zips will be
-// built when running ./gradlew build
-task build
-
-task clean(type: Delete) {
-    description = "Deletes the build directory"
-    group = "Build"
-    delete buildDir
-}
-
-def outputDir = file("${rootDir}/output")
-
-task copyOutputs(type: Copy) {
-    destinationDir = outputDir
-    def ntv = project(":native")
-    dependsOn ntv.opencvZip
-    def arm = project(":arm")
-    if (buildArm) {
-        dependsOn arm.opencvZip
-    }
-    from (ntv.opencvZip.outputs) {}
-    if (buildArm) {
-        from (arm.opencvZip.outputs) {}
-    }
-    if (project.hasProperty("copywpilibs")) {
-        dependsOn ntv.depsZip
-        from (ntv.depsZip.outputs) {
-            into project.getWpiLibDeps(ntv)
-        }
-        if (buildArm) {
-            dependsOn arm.depsZip
-            from (arm.depsZip.outputs) {
-                into project.getWpiLibDeps(arm)
-            }
-        }
-    }
-}
-
-task copyToNet(type: Copy) {
-    destinationDir = file("${rootDir}/src/FRC.OpenCvSharp.DesktopLibraries/Libraries")
-
-    project(':native').model {
-        binaries {
-            withType(SharedLibraryBinarySpec) { binary ->
-                from(binary.sharedLibraryFile) {
-                    if (targetPlatform.architecture.amd64) {
-                        into 'amd64'
-                    } else {
-                        into targetPlatform.architecture.name
+  components {
+    OpenCvSharpExtern(NativeLibrarySpec) {
+      sources {
+                cpp {
+                    source {
+                        srcDirs 'src/OpenCvSharpExtern'
+                        include '**/*.cpp'
+                    }
+                    exportedHeaders {
+                        srcDirs "$rootDir/include"
                     }
                 }
             }
-        }
     }
-}
+  }
+  binaries {
 
-project(':native').tasks.whenTaskAdded { task ->
-    def name = task.name.toLowerCase()
-    if (name.contains("sharedlibrary") || name.contains("staticlibrary")) {
-        copyToNet.dependsOn task
+    withType(StaticLibraryBinarySpec) {
+      it.buildable = false
     }
-}
-
-build.dependsOn copyOutputs
-
-clean {
-    delete outputDir
+  }
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '3.3'
+    gradleVersion = '4.1'
 }

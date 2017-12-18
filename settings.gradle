@@ -1,5 +1,0 @@
-include 'native'
-
-if (!hasProperty('skipArm')) {
-    include 'arm'
-}
